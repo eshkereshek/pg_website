@@ -64,7 +64,7 @@ function App() {
         <p>Устанавливай все версии игры, популярные сборки модов и заходи с аккаунтом Ely.by в один клик. Погнали играть с друзьями!</p>
         
         <Link to="/download" className="download-btn">
-          Скачать v7.0.3
+          Скачать Pagrysha Launcher
         </Link>
 
         <img src="/hero-launcher.png" alt="Launcher Interface" className="hero-screenshot" />
