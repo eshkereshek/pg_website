@@ -37,7 +37,7 @@ export default function Login() {
         </Link>
         <div className="nav-links">
           <Link to="/download">Скачать</Link>
-          <Link to="/register" className="download-btn" style={{padding: '8px 15px'}}>Регистрация</Link>
+          <Link to="/register" className="nav-btn">Регистрация</Link>
         </div>
       </nav>
 

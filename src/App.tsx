@@ -56,9 +56,9 @@ function App() {
           <Link to="/download">Скачать</Link>
           <a href="https://github.com/eshkereshek/pg_launcher" target="_blank" rel="noreferrer">GitHub</a>
           {isAuthenticated ? (
-            <Link to="/profile" className="download-btn" style={{padding: '8px 15px', background: 'rgba(255,255,255,0.1)'}}>Мой Аккаунт</Link>
+            <Link to="/profile" className="nav-btn">Мой Аккаунт</Link>
           ) : (
-            <Link to="/login" className="download-btn" style={{padding: '8px 15px', background: 'rgba(255,255,255,0.1)'}}>Войти</Link>
+            <Link to="/login" className="nav-btn">Войти</Link>
           )}
         </div>
       </nav>

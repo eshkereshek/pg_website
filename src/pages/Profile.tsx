@@ -110,7 +110,7 @@ export default function Profile() {
         </Link>
         <div className="nav-links">
           <span style={{ color: '#fff', opacity: 0.7 }}>Привет, {user.username}!</span>
-          <button onClick={logout} className="download-btn" style={{padding: '8px 15px', background: 'rgba(255,100,100,0.2)', color: '#ff6b6b'}}>Выйти</button>
+          <button onClick={logout} className="nav-btn nav-btn-danger">Выйти</button>
         </div>
       </nav>
 

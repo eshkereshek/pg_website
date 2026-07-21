@@ -35,7 +35,7 @@ export default function Register() {
         </Link>
         <div className="nav-links">
           <Link to="/download">Скачать</Link>
-          <Link to="/login" className="download-btn" style={{padding: '8px 15px', background: 'rgba(255,255,255,0.1)'}}>Вход</Link>
+          <Link to="/login" className="nav-btn">Войти</Link>
         </div>
       </nav>
 
