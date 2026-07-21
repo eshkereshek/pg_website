@@ -30,7 +30,7 @@ export default function Register() {
     <>
       <nav className="navbar">
         <Link to="/" className="nav-brand">
-          <img src="/icon.png" alt="Pagrysha Launcher" />
+          <img src="/newicon.png" alt="Pagrysha Launcher" />
           <span>Pagrysha Launcher</span>
         </Link>
         <div className="nav-links">
@@ -39,7 +39,8 @@ export default function Register() {
         </div>
       </nav>
 
-      <div className="auth-container">
+      <div className="auth-page">
+        <div className="auth-container">
         <div className="auth-card">
           <h2>Регистрация</h2>
           <p>Создайте аккаунт для экосистемы Pagrysha</p>
@@ -67,7 +68,7 @@ export default function Register() {
                 placeholder="Придумайте пароль"
               />
             </div>
-            <button type="submit" className="download-btn auth-submit" disabled={loading}>
+            <button type="submit" className="auth-submit" disabled={loading}>
               {loading ? 'Создание...' : 'Зарегистрироваться'}
             </button>
           </form>
@@ -75,6 +76,7 @@ export default function Register() {
           <div className="auth-footer">
             Уже есть аккаунт? <Link to="/login">Войти</Link>
           </div>
+        </div>
         </div>
       </div>
     </>

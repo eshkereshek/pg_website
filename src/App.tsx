@@ -49,7 +49,7 @@ function App() {
     <>
       <nav className="navbar">
         <a href="#" className="nav-brand">
-          <img src="/icon.png" alt="Pagrysha Launcher" />
+          <img src="/newicon.png" alt="Pagrysha Launcher" />
           <span>Pagrysha Launcher</span>
         </a>
         <div className="nav-links">

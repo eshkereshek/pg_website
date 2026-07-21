@@ -10,7 +10,7 @@ function DownloadPage() {
 
       <nav className="navbar" style={{ position: 'relative', background: 'transparent', border: 'none' }}>
         <Link to="/" className="nav-brand">
-          <img src="/icon.png" alt="Pagrysha Launcher" />
+          <img src="/newicon.png" alt="Pagrysha Launcher" />
           <span>Pagrysha Launcher</span>
         </Link>
         <div className="nav-links">

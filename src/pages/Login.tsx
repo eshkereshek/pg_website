@@ -32,7 +32,7 @@ export default function Login() {
     <>
       <nav className="navbar">
         <Link to="/" className="nav-brand">
-          <img src="/icon.png" alt="Pagrysha Launcher" />
+          <img src="/newicon.png" alt="Pagrysha Launcher" />
           <span>Pagrysha Launcher</span>
         </Link>
         <div className="nav-links">
@@ -41,7 +41,8 @@ export default function Login() {
         </div>
       </nav>
 
-      <div className="auth-container">
+      <div className="auth-page">
+        <div className="auth-container">
         <div className="auth-card">
           <h2>Вход в аккаунт</h2>
           <p>Управляйте своими скинами и плащами</p>
@@ -69,7 +70,7 @@ export default function Login() {
                 placeholder="••••••••"
               />
             </div>
-            <button type="submit" className="download-btn auth-submit" disabled={loading}>
+            <button type="submit" className="auth-submit" disabled={loading}>
               {loading ? 'Вход...' : 'Войти'}
             </button>
           </form>
@@ -77,6 +78,7 @@ export default function Login() {
           <div className="auth-footer">
             Нет аккаунта? <Link to="/register">Зарегистрироваться</Link>
           </div>
+        </div>
         </div>
       </div>
     </>

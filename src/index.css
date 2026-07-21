@@ -73,6 +73,7 @@ h1, h2, h3 {
 .nav-links {
   display: flex;
   gap: 30px;
+  align-items: center;
 }
 
 .nav-links a {
@@ -720,6 +721,13 @@ h1, h2, h3 {
   justify-content: center;
   min-height: calc(100vh - 80px);
   padding: 2rem;
+}
+
+.auth-page {
+  background-image: url('/logbcg.jpg');
+  background-size: cover;
+  background-position: center;
+  min-height: 100vh;
 }
 
 .auth-card {

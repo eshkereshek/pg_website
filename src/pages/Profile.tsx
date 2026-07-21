@@ -105,7 +105,7 @@ export default function Profile() {
     <>
       <nav className="navbar">
         <Link to="/" className="nav-brand">
-          <img src="/icon.png" alt="Pagrysha Launcher" />
+          <img src="/newicon.png" alt="Pagrysha Launcher" />
           <span>Pagrysha Launcher</span>
         </Link>
         <div className="nav-links">
