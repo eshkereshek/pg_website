@@ -28,7 +28,7 @@ function DownloadPage() {
               Pagrysha Launcher просто лучше.
             </p>
             
-            <a href="https://github.com/eshkereshek/pg_launcher/releases/latest/download/Pagrysha.Launcher.7.1.5.exe" className="download-btn-green" target="_blank" rel="noreferrer">
+            <a href="https://github.com/eshkereshek/pg_launcher/releases/latest/download/Pagrysha.Launcher.7.1.6.exe" className="download-btn-green" target="_blank" rel="noreferrer">
               <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" style={{marginRight: '10px'}}><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="7 10 12 15 17 10"></polyline><line x1="12" y1="15" x2="12" y2="3"></line></svg>
               Скачать для Windows
             </a>
@@ -55,7 +55,7 @@ function DownloadPage() {
               <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M0 3.449L9.75 2.1v9.451H0m10.949-9.602L24 0v11.4H10.949M0 12.6h9.75v9.451L0 20.699M10.949 12.6H24V24l-13.051-1.801"/></svg>
               WINDOWS
             </div>
-            <a href="https://github.com/eshkereshek/pg_launcher/releases/latest/download/Pagrysha.Launcher.7.1.5.exe" className="version-btn" target="_blank" rel="noreferrer">
+            <a href="https://github.com/eshkereshek/pg_launcher/releases/latest/download/Pagrysha.Launcher.7.1.6.exe" className="version-btn" target="_blank" rel="noreferrer">
               <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="7 10 12 15 17 10"></polyline><line x1="12" y1="15" x2="12" y2="3"></line></svg>
               Скачать
             </a>
@@ -68,11 +68,11 @@ function DownloadPage() {
               <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M17.05 20.28c-.98.95-2.05.8-3.08.35-1.09-.46-2.09-.48-3.24 0-1.44.62-2.2.44-3.06-.35C2.79 15.25 3.51 7.59 9.05 7.31c1.35.07 2.29.74 3.08.8 1.18-.19 2.31-.88 3.5-.8 1.48.06 2.62.62 3.32 1.6-2.88 1.76-2.39 5.56.57 6.78-.65 1.71-1.48 3.45-2.47 4.59zM12.03 7.25c-.15-2.23 1.66-4.07 3.74-4.25.32 2.39-1.92 4.28-3.74 4.25z"/></svg>
               MACOS
             </div>
-            <button className="version-btn disabled" disabled>
+            <a href="https://github.com/eshkereshek/pg_launcher/releases/latest/download/Pagrysha.Launcher-7.1.6-arm64.dmg" className="version-btn" target="_blank" rel="noreferrer">
               <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="7 10 12 15 17 10"></polyline><line x1="12" y1="15" x2="12" y2="3"></line></svg>
               Скачать
-            </button>
-            <p className="version-req">В разработке</p>
+            </a>
+            <p className="version-req">macOS 10.15+</p>
           </div>
 
           {/* Linux */}
