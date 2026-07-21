@@ -1,4 +1,5 @@
-import React, { createContext, useState, useEffect, ReactNode, useContext } from 'react';
+import { createContext, useState, useEffect, useContext } from 'react';
+import type { ReactNode } from 'react';
 import axios from 'axios';
 
 // Использовать URL из .env (VITE_API_URL) или запасной локальный хост
