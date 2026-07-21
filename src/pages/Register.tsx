@@ -68,7 +68,7 @@ export default function Register() {
                 placeholder="Придумайте пароль"
               />
             </div>
-            <button type="submit" className="auth-submit" disabled={loading}>
+            <button type="submit" className="nav-btn auth-submit" disabled={loading} style={{ justifyContent: 'center' }}>
               {loading ? 'Создание...' : 'Зарегистрироваться'}
             </button>
           </form>

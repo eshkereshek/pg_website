@@ -70,7 +70,7 @@ export default function Login() {
                 placeholder="••••••••"
               />
             </div>
-            <button type="submit" className="auth-submit" disabled={loading}>
+            <button type="submit" className="nav-btn auth-submit" disabled={loading} style={{ justifyContent: 'center' }}>
               {loading ? 'Вход...' : 'Войти'}
             </button>
           </form>

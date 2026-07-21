@@ -724,7 +724,7 @@ h1, h2, h3 {
 }
 
 .auth-page {
-  background-image: url('/logbcg.jpg');
+  background-image: url('/lvbck.jpg');
   background-size: cover;
   background-position: center;
   min-height: 100vh;
@@ -794,7 +794,6 @@ h1, h2, h3 {
   width: 100%;
   margin-top: 1rem;
   cursor: pointer;
-  border: none;
 }
 
 .auth-submit:disabled {
