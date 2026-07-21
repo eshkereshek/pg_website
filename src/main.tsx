@@ -4,14 +4,23 @@ import { HashRouter, Routes, Route } from 'react-router-dom'
 import './index.css'
 import App from './App.tsx'
 import DownloadPage from './DownloadPage.tsx'
+import Login from './pages/Login.tsx'
+import Register from './pages/Register.tsx'
+import Profile from './pages/Profile.tsx'
+import { AuthProvider } from './contexts/AuthContext.tsx'
 
 createRoot(document.getElementById('root')!).render(
   <StrictMode>
-    <HashRouter>
-      <Routes>
-        <Route path="/" element={<App />} />
-        <Route path="/download" element={<DownloadPage />} />
-      </Routes>
-    </HashRouter>
+    <AuthProvider>
+      <HashRouter>
+        <Routes>
+          <Route path="/" element={<App />} />
+          <Route path="/download" element={<DownloadPage />} />
+          <Route path="/login" element={<Login />} />
+          <Route path="/register" element={<Register />} />
+          <Route path="/profile" element={<Profile />} />
+        </Routes>
+      </HashRouter>
+    </AuthProvider>
   </StrictMode>,
 )
