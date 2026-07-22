@@ -121,19 +121,36 @@ export default function SkinBrowser({ onSkinUpdated }: SkinBrowserProps) {
   const [loading, setLoading] = useState(false);
   const [hasMore, setHasMore] = useState(true);
   const [applying, setApplying] = useState<number | null>(null);
+  const [searchQuery, setSearchQuery] = useState("");
+  const [debouncedQuery, setDebouncedQuery] = useState("");
   const observerTarget = useRef<HTMLDivElement>(null);
 
-  const fetchSkins = async (pageNum: number) => {
+  // Debounce search
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      setDebouncedQuery(searchQuery);
+    }, 500);
+    return () => clearTimeout(timer);
+  }, [searchQuery]);
+
+  // Reset list when query changes
+  useEffect(() => {
+    setSkins([]);
+    setPage(1);
+    setHasMore(true);
+  }, [debouncedQuery]);
+
+  const fetchSkins = async (pageNum: number, query: string) => {
     if (loading || !hasMore) return;
     setLoading(true);
     try {
-      const res = await axios.get(`https://api.mineskin.org/get/list/${pageNum}?size=24`);
+      const filterParam = query ? `&filter=${encodeURIComponent(query)}` : '';
+      const res = await axios.get(`https://api.mineskin.org/get/list/${pageNum}?size=24${filterParam}`);
       if (res.data && res.data.skins) {
         if (res.data.skins.length === 0) {
           setHasMore(false);
         } else {
           setSkins(prev => {
-            // Filter out duplicates just in case
             const newSkins = res.data.skins.filter((s: Skin) => !prev.some(p => p.id === s.id));
             return [...prev, ...newSkins];
           });
@@ -149,8 +166,11 @@ export default function SkinBrowser({ onSkinUpdated }: SkinBrowserProps) {
   };
 
   useEffect(() => {
-    fetchSkins(page);
-  }, [page]);
+    // Only fetch if hasMore is true to prevent double fetching at the end
+    if (hasMore) {
+      fetchSkins(page, debouncedQuery);
+    }
+  }, [page, debouncedQuery]);
 
   useEffect(() => {
     const observer = new IntersectionObserver(
@@ -206,7 +226,16 @@ export default function SkinBrowser({ onSkinUpdated }: SkinBrowserProps) {
 
   return (
     <div className="skin-browser">
-      <h2 className="skin-browser-title">Каталог скинов (MineSkin)</h2>
+      <div className="skin-browser-header">
+        <h2 className="skin-browser-title">Каталог скинов</h2>
+        <input 
+          type="text" 
+          className="skin-search-input" 
+          placeholder="Поиск скинов..." 
+          value={searchQuery}
+          onChange={(e) => setSearchQuery(e.target.value)}
+        />
+      </div>
       
       <div className="skin-browser-grid">
         {skins.map(skin => (
@@ -226,6 +255,7 @@ export default function SkinBrowser({ onSkinUpdated }: SkinBrowserProps) {
       <div ref={observerTarget} className="skin-browser-loading-container">
         {loading && <div className="skin-browser-loading">Загрузка скинов...</div>}
         {!hasMore && skins.length > 0 && <div className="skin-browser-loading">Больше скинов нет!</div>}
+        {!loading && skins.length === 0 && <div className="skin-browser-loading">Скины не найдены</div>}
       </div>
     </div>
   );
