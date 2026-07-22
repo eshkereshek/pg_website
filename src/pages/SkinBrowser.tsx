@@ -59,17 +59,31 @@ export default function SkinBrowser({ onSkinUpdated }: SkinBrowserProps) {
   const [skins, setSkins] = useState<Skin[]>([]);
   const [page, setPage] = useState(1);
   const [loading, setLoading] = useState(false);
+  const [hasMore, setHasMore] = useState(true);
   const [applying, setApplying] = useState<number | null>(null);
+  const observerTarget = useRef<HTMLDivElement>(null);
 
   const fetchSkins = async (pageNum: number) => {
+    if (loading || !hasMore) return;
     setLoading(true);
     try {
-      const res = await axios.get(`https://api.mineskin.org/get/list/${pageNum}?size=12`);
+      const res = await axios.get(`https://api.mineskin.org/get/list/${pageNum}?size=24`);
       if (res.data && res.data.skins) {
-        setSkins(res.data.skins);
+        if (res.data.skins.length === 0) {
+          setHasMore(false);
+        } else {
+          setSkins(prev => {
+            // Filter out duplicates just in case
+            const newSkins = res.data.skins.filter((s: Skin) => !prev.some(p => p.id === s.id));
+            return [...prev, ...newSkins];
+          });
+        }
+      } else {
+        setHasMore(false);
       }
     } catch (e) {
       console.error('Error fetching skins', e);
+      setHasMore(false);
     }
     setLoading(false);
   };
@@ -77,6 +91,27 @@ export default function SkinBrowser({ onSkinUpdated }: SkinBrowserProps) {
   useEffect(() => {
     fetchSkins(page);
   }, [page]);
+
+  useEffect(() => {
+    const observer = new IntersectionObserver(
+      entries => {
+        if (entries[0].isIntersecting && !loading && hasMore) {
+          setPage(p => p + 1);
+        }
+      },
+      { threshold: 1.0 }
+    );
+
+    if (observerTarget.current) {
+      observer.observe(observerTarget.current);
+    }
+
+    return () => {
+      if (observerTarget.current) {
+        observer.unobserve(observerTarget.current);
+      }
+    };
+  }, [loading, hasMore]);
 
   const applySkin = async (skin: Skin) => {
     setApplying(skin.id);
@@ -113,41 +148,24 @@ export default function SkinBrowser({ onSkinUpdated }: SkinBrowserProps) {
     <div className="skin-browser">
       <h2 className="skin-browser-title">Каталог скинов (MineSkin)</h2>
       
-      {loading ? (
-        <div className="skin-browser-loading">Загрузка...</div>
-      ) : (
-        <div className="skin-browser-grid">
-          {skins.map(skin => (
-            <div key={skin.id} className="skin-card">
-              <SkinPreview3D url={skin.url} />
-              <button 
-                className="skin-apply-btn" 
-                onClick={() => applySkin(skin)}
-                disabled={applying === skin.id}
-              >
-                {applying === skin.id ? 'Установка...' : 'Надеть'}
-              </button>
-            </div>
-          ))}
-        </div>
-      )}
+      <div className="skin-browser-grid">
+        {skins.map(skin => (
+          <div key={skin.id} className="skin-card">
+            <SkinPreview3D url={skin.url} />
+            <button 
+              className="nav-btn skin-apply-btn" 
+              onClick={() => applySkin(skin)}
+              disabled={applying === skin.id}
+            >
+              {applying === skin.id ? 'Установка...' : 'Надеть'}
+            </button>
+          </div>
+        ))}
+      </div>
 
-      <div className="skin-browser-pagination">
-        <button 
-          onClick={() => setPage(p => Math.max(1, p - 1))} 
-          disabled={page === 1 || loading}
-          className="browser-nav-btn"
-        >
-          Назад
-        </button>
-        <span className="page-indicator">Страница {page}</span>
-        <button 
-          onClick={() => setPage(p => p + 1)} 
-          disabled={loading}
-          className="browser-nav-btn"
-        >
-          Вперед
-        </button>
+      <div ref={observerTarget} className="skin-browser-loading-container">
+        {loading && <div className="skin-browser-loading">Загрузка скинов...</div>}
+        {!hasMore && skins.length > 0 && <div className="skin-browser-loading">Больше скинов нет!</div>}
       </div>
     </div>
   );
