@@ -134,54 +134,52 @@ export default function Profile() {
           </button>
         </div>
 
-        {activeTab === 'wardrobe' && (
-          <div className="profile-grid">
-            <div className="profile-viewer" ref={viewerRef}>
-              {/* Skinview3D goes here */}
+        <div className="profile-grid" style={{ display: activeTab === 'wardrobe' ? 'grid' : 'none' }}>
+          <div className="profile-viewer" ref={viewerRef}>
+            {/* Skinview3D goes here */}
+          </div>
+          
+          <div className="profile-controls">
+            <div className="control-group">
+              <h3>Ваш скин</h3>
+              <p>Рекомендуемый размер 64x64 или 64x32 (PNG)</p>
+              <div className="btn-row">
+                <label className="upload-btn">
+                  {uploadingSkin ? 'Загрузка...' : 'Загрузить скин'}
+                  <input type="file" accept=".png" onChange={(e) => handleFileUpload(e, 'skin')} disabled={uploadingSkin} hidden />
+                </label>
+                {user.skinUrl && (
+                  <button onClick={() => handleRemove('skin')} className="remove-btn">Удалить</button>
+                )}
+              </div>
             </div>
             
-            <div className="profile-controls">
-              <div className="control-group">
-                <h3>Ваш скин</h3>
-                <p>Рекомендуемый размер 64x64 или 64x32 (PNG)</p>
-                <div className="btn-row">
-                  <label className="upload-btn">
-                    {uploadingSkin ? 'Загрузка...' : 'Загрузить скин'}
-                    <input type="file" accept=".png" onChange={(e) => handleFileUpload(e, 'skin')} disabled={uploadingSkin} hidden />
-                  </label>
-                  {user.skinUrl && (
-                    <button onClick={() => handleRemove('skin')} className="remove-btn">Удалить</button>
-                  )}
-                </div>
-              </div>
-              
-              <div className="control-group">
-                <h3>Ваш плащ</h3>
-                <p>Рекомендуемый размер 64x32 или 22x17 (PNG)</p>
-                <div className="btn-row">
-                  <label className="upload-btn">
-                    {uploadingCape ? 'Загрузка...' : 'Загрузить плащ'}
-                    <input type="file" accept=".png" onChange={(e) => handleFileUpload(e, 'cape')} disabled={uploadingCape} hidden />
-                  </label>
-                  {user.capeUrl && (
-                    <button onClick={() => handleRemove('cape')} className="remove-btn">Удалить</button>
-                  )}
-                </div>
-              </div>
-
-              <div className="info-box">
-                <p>💡 Чтобы другие игроки видели ваши скины, им необходимо установить мод <strong>PG Sync</strong>. Мод автоматически подхватит загруженные здесь текстуры.</p>
+            <div className="control-group">
+              <h3>Ваш плащ</h3>
+              <p>Рекомендуемый размер 64x32 или 22x17 (PNG)</p>
+              <div className="btn-row">
+                <label className="upload-btn">
+                  {uploadingCape ? 'Загрузка...' : 'Загрузить плащ'}
+                  <input type="file" accept=".png" onChange={(e) => handleFileUpload(e, 'cape')} disabled={uploadingCape} hidden />
+                </label>
+                {user.capeUrl && (
+                  <button onClick={() => handleRemove('cape')} className="remove-btn">Удалить</button>
+                )}
               </div>
             </div>
+
+            <div className="info-box">
+              <p>💡 Чтобы другие игроки видели ваши скины, им необходимо установить мод <strong>PG Sync</strong>. Мод автоматически подхватит загруженные здесь текстуры.</p>
+            </div>
           </div>
-        )}
+        </div>
         
-        {activeTab === 'catalog' && (
+        <div style={{ display: activeTab === 'catalog' ? 'block' : 'none' }}>
           <SkinBrowser onSkinUpdated={() => {
             // Re-trigger the SkinViewer update by reloading the page or we just let it update through state
             // The state `user.skinUrl` is updated by updateUser in SkinBrowser, which triggers the useEffect
           }} />
-        )}
+        </div>
       </div>
     </>
   );

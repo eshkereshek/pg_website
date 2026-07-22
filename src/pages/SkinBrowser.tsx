@@ -23,7 +23,7 @@ function SkinPreview3D({ url }: { url: string }) {
         canvas: document.createElement('canvas'),
         width: 100,
         height: 180,
-        skin: `https://api.allorigins.win/raw?url=${encodeURIComponent(url)}`
+        skin: url
       });
       // We don't want animation to lag the browser, so we make it static initially.
       // The user can still rotate it by dragging.
@@ -81,8 +81,7 @@ export default function SkinBrowser({ onSkinUpdated }: SkinBrowserProps) {
   const applySkin = async (skin: Skin) => {
     setApplying(skin.id);
     try {
-      const proxyUrl = `https://api.allorigins.win/raw?url=${encodeURIComponent(skin.url)}`;
-      const imageRes = await fetch(proxyUrl);
+      const imageRes = await fetch(skin.url);
       const blob = await imageRes.blob();
       const file = new File([blob], `skin_${skin.id}.png`, { type: 'image/png' });
 
