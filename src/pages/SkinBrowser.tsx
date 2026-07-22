@@ -196,7 +196,7 @@ export default function SkinBrowser({ onSkinUpdated }: SkinBrowserProps) {
   const applySkin = async (skin: Skin) => {
     setApplying(skin.id);
     try {
-      const imageRes = await fetch(skin.url);
+      const imageRes = await fetch(skin.url.replace('http://', 'https://'));
       const blob = await imageRes.blob();
       const file = new File([blob], `skin_${skin.id}.png`, { type: 'image/png' });
 
