@@ -3,6 +3,7 @@ import { Link, useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import { SkinViewer, WalkingAnimation } from 'skinview3d';
 import { useAuth, API_URL } from '../contexts/AuthContext';
+import SkinBrowser from './SkinBrowser';
 import '../index.css';
 
 export default function Profile() {
@@ -156,6 +157,11 @@ export default function Profile() {
             </div>
           </div>
         </div>
+        
+        <SkinBrowser onSkinUpdated={() => {
+          // Re-trigger the SkinViewer update by reloading the page or we just let it update through state
+          // The state `user.skinUrl` is updated by updateUser in SkinBrowser, which triggers the useEffect
+        }} />
       </div>
     </>
   );
