@@ -4,78 +4,61 @@ import axios from 'axios';
 import { SkinViewer, WalkingAnimation } from 'skinview3d';
 import { useAuth, API_URL } from '../contexts/AuthContext';
 import SkinBrowser from './SkinBrowser';
+import CapeBrowser from './CapeBrowser';
 import '../index.css';
+import './Profile.css';
 
 export default function Profile() {
   const { user, token, logout, updateUser, isLoading } = useAuth();
   const navigate = useNavigate();
   const viewerRef = useRef<HTMLDivElement>(null);
   const [skinViewer, setSkinViewer] = useState<SkinViewer | null>(null);
-  const [activeTab, setActiveTab] = useState<'wardrobe' | 'catalog'>('wardrobe');
+  const [activeTab, setActiveTab] = useState<'wardrobe' | 'catalog' | 'capes'>('wardrobe');
   
   const [uploadingSkin, setUploadingSkin] = useState(false);
   const [uploadingCape, setUploadingCape] = useState(false);
 
   useEffect(() => {
-  const [isLoading, setIsLoading] = useState(true);
-
-  // Initialize Auth
-  useEffect(() => {
-    // wait for auth
-    if (!token) {
-      // should be redirected by ProtectedRoute
-    } else {
-      setIsLoading(false);
+    if (!isLoading && !user) {
+      navigate('/login');
     }
-  }, [token]);
+  }, [user, isLoading, navigate]);
 
-  // Handle SkinViewer setup
   useEffect(() => {
-    if (!user || activeTab !== 'wardrobe') return;
-
-    if (!skinViewerInstance.current && viewerRef.current) {
-      skinViewerInstance.current = new SkinViewer({
+    if (viewerRef.current && !skinViewer && user && activeTab === 'wardrobe') {
+      const viewer = new SkinViewer({
         canvas: document.createElement('canvas'),
         width: 300,
         height: 400,
-        animation: new WalkingAnimation()
+        skin: user.skinUrl || 'https://minotar.net/skin/Steve.png',
+        cape: user.capeUrl || undefined
       });
-      viewerRef.current.appendChild(skinViewerInstance.current.canvas);
-      
-      // Setup controls
-      const control = new createOrbitControls(skinViewerInstance.current);
-      control.enableZoom = true;
-      control.enablePan = false;
+      viewer.animation = new WalkingAnimation();
+      viewerRef.current.appendChild(viewer.canvas);
+      setSkinViewer(viewer);
     }
-
-    if (skinViewerInstance.current) {
-      const viewer = skinViewerInstance.current;
-      
-      if (user.skinUrl) {
-        viewer.loadSkin(user.skinUrl, { model: 'auto' }).catch(console.error);
-      } else {
-        // default steve
-        viewer.loadSkin('https://textures.minecraft.net/texture/1a4af718455d4aab528e7a61f86fa25e6a369d1768dcb13f7df319a713eb810b').catch(console.error);
-      }
-
-      if (user.capeUrl) {
-        viewer.loadCape(user.capeUrl).catch(console.error);
-      } else {
-        viewer.resetCape();
-      }
-    }
-
-    // Cleanup on unmount or tab change
+    
     return () => {
-      if (skinViewerInstance.current) {
-        skinViewerInstance.current.dispose();
-        if (viewerRef.current && viewerRef.current.contains(skinViewerInstance.current.canvas)) {
-          viewerRef.current.removeChild(skinViewerInstance.current.canvas);
+      if (skinViewer && activeTab !== 'wardrobe') {
+        skinViewer.dispose();
+        if (viewerRef.current && viewerRef.current.contains(skinViewer.canvas)) {
+           viewerRef.current.removeChild(skinViewer.canvas);
         }
-        skinViewerInstance.current = null;
+        setSkinViewer(null);
       }
     };
-  }, [user, activeTab]);
+  }, [viewerRef, user, skinViewer, activeTab]);
+
+  useEffect(() => {
+    if (skinViewer && user && activeTab === 'wardrobe') {
+      skinViewer.loadSkin(user.skinUrl || 'https://minotar.net/skin/Steve.png');
+      if (user.capeUrl) {
+        skinViewer.loadCape(user.capeUrl);
+      } else {
+        skinViewer.resetCape();
+      }
+    }
+  }, [user, skinViewer, activeTab]);
 
   const handleFileUpload = async (e: React.ChangeEvent<HTMLInputElement>, type: 'skin' | 'cape') => {
     const file = e.target.files?.[0];
@@ -210,15 +193,11 @@ export default function Profile() {
         </div>
         
         <div style={{ display: activeTab === 'catalog' ? 'block' : 'none' }}>
-          <SkinBrowser onSkinUpdated={() => {
-            // Update through state
-          }} />
+          <SkinBrowser onSkinUpdated={() => {}} />
         </div>
 
         <div style={{ display: activeTab === 'capes' ? 'block' : 'none' }}>
-          <CapeBrowser onSkinUpdated={() => {
-            // Update through state
-          }} />
+          <CapeBrowser onSkinUpdated={() => {}} />
         </div>
       </div>
     </>
