@@ -61,23 +61,38 @@ function SkinPreview3D({ url }: { url: string }) {
   }, [url]);
 
   useEffect(() => {
-    if (isHovered && containerRef.current) {
-      // Create temporary viewer on hover
-      const newViewer = new SkinViewer({
-        width: 100,
-        height: 180,
-        skin: url.replace('http://', 'https://'),
-        animation: new WalkingAnimation()
-      });
-      containerRef.current.appendChild(newViewer.canvas);
-      
-      return () => {
+    if (!isHovered || !containerRef.current) return;
+    
+    const newViewer = new SkinViewer({
+      width: 100,
+      height: 180
+    });
+    newViewer.animation = new WalkingAnimation();
+    
+    let isCancelled = false;
+    
+    newViewer.loadSkin(url.replace('http://', 'https://')).then(() => {
+      if (isCancelled) {
         newViewer.dispose();
-        if (containerRef.current) {
-          containerRef.current.innerHTML = '';
-        }
-      };
-    }
+      } else if (containerRef.current) {
+        containerRef.current.appendChild(newViewer.canvas);
+      }
+    }).catch((e) => {
+      console.error("Skin load error:", e);
+      newViewer.dispose();
+    });
+    
+    return () => {
+      isCancelled = true;
+      if (containerRef.current && containerRef.current.contains(newViewer.canvas)) {
+        containerRef.current.removeChild(newViewer.canvas);
+        newViewer.dispose();
+      } else if (newViewer.canvas && !newViewer.disposed) {
+        // If it was instantiated but not appended, just dispose if it hasn't loaded yet
+        // The .then or .catch will also dispose it, but we can call it here if needed.
+        // Actually, it's safer to let the .then or .catch handle it if it's still loading.
+      }
+    };
   }, [isHovered, url]);
 
   return (
