@@ -13,44 +13,92 @@ interface SkinBrowserProps {
   onSkinUpdated: () => void;
 }
 
+// Global snapshot worker to avoid WebGL 16 context limit
+let snapshotWorker: SkinViewer | null = null;
+const snapshotQueue: { url: string, resolve: (snapshot: string) => void }[] = [];
+let isWorking = false;
+
+const getSkinSnapshot = (url: string): Promise<string> => {
+  return new Promise(resolve => {
+    snapshotQueue.push({ url, resolve });
+    processQueue();
+  });
+};
+
+const processQueue = async () => {
+  if (isWorking || snapshotQueue.length === 0) return;
+  isWorking = true;
+  
+  if (!snapshotWorker) {
+    snapshotWorker = new SkinViewer({ width: 100, height: 180, renderPaused: true });
+  }
+
+  while (snapshotQueue.length > 0) {
+    const { url, resolve } = snapshotQueue.shift()!;
+    try {
+      await snapshotWorker.loadSkin(url.replace('http://', 'https://'));
+      snapshotWorker.render();
+      resolve(snapshotWorker.canvas.toDataURL());
+    } catch (e) {
+      console.error('Error generating snapshot', e);
+      resolve('');
+    }
+  }
+  isWorking = false;
+};
+
 function SkinPreview3D({ url }: { url: string }) {
   const containerRef = useRef<HTMLDivElement>(null);
+  const [snapshot, setSnapshot] = useState<string | null>(null);
+  const [isHovered, setIsHovered] = useState(false);
   const [viewer, setViewer] = useState<SkinViewer | null>(null);
 
   useEffect(() => {
-    if (containerRef.current && !viewer) {
+    let active = true;
+    getSkinSnapshot(url).then(img => {
+      if (active) setSnapshot(img);
+    });
+    return () => { active = false; };
+  }, [url]);
+
+  useEffect(() => {
+    if (isHovered && containerRef.current) {
+      // Create temporary viewer on hover
       const newViewer = new SkinViewer({
-        canvas: document.createElement('canvas'),
         width: 100,
         height: 180,
-        skin: url
+        skin: url.replace('http://', 'https://'),
+        animation: new WalkingAnimation()
       });
-      // We don't want animation to lag the browser, so we make it static initially.
-      // The user can still rotate it by dragging.
       containerRef.current.appendChild(newViewer.canvas);
       setViewer(newViewer);
+      
+      return () => {
+        newViewer.dispose();
+        if (containerRef.current) {
+          containerRef.current.innerHTML = '';
+        }
+      };
     }
-  }, [url, viewer]);
-
-  const handleMouseEnter = () => {
-    if (viewer) {
-      viewer.animation = new WalkingAnimation();
-    }
-  };
-
-  const handleMouseLeave = () => {
-    if (viewer) {
-      viewer.animation = null;
-    }
-  };
+  }, [isHovered, url]);
 
   return (
     <div 
       className="skin-3d-preview" 
       ref={containerRef}
-      onMouseEnter={handleMouseEnter}
-      onMouseLeave={handleMouseLeave}
-    />
+      onMouseEnter={() => setIsHovered(true)}
+      onMouseLeave={() => {
+        setIsHovered(false);
+        setViewer(null);
+      }}
+    >
+      {!isHovered && snapshot && (
+        <img src={snapshot} alt="Skin Preview" style={{ width: 100, height: 180 }} />
+      )}
+      {!isHovered && !snapshot && (
+        <div style={{ color: '#aaa', fontSize: 12 }}>Загрузка...</div>
+      )}
+    </div>
   );
 }
 
