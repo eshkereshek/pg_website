@@ -6,7 +6,6 @@ import { useAuth, API_URL } from '../contexts/AuthContext';
 import SkinBrowser from './SkinBrowser';
 import CapeBrowser from './CapeBrowser';
 import '../index.css';
-import './Profile.css';
 
 export default function Profile() {
   const { user, token, logout, updateUser, isLoading } = useAuth();
