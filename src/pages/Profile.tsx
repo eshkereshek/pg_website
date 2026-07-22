@@ -11,6 +11,7 @@ export default function Profile() {
   const navigate = useNavigate();
   const viewerRef = useRef<HTMLDivElement>(null);
   const [skinViewer, setSkinViewer] = useState<SkinViewer | null>(null);
+  const [activeTab, setActiveTab] = useState<'wardrobe' | 'catalog'>('wardrobe');
   
   const [uploadingSkin, setUploadingSkin] = useState(false);
   const [uploadingCape, setUploadingCape] = useState(false);
@@ -118,50 +119,69 @@ export default function Profile() {
       <div className="profile-container">
         <h1 className="profile-title">Гардероб</h1>
         
-        <div className="profile-grid">
-          <div className="profile-viewer" ref={viewerRef}>
-            {/* Skinview3D goes here */}
-          </div>
-          
-          <div className="profile-controls">
-            <div className="control-group">
-              <h3>Ваш скин</h3>
-              <p>Рекомендуемый размер 64x64 или 64x32 (PNG)</p>
-              <div className="btn-row">
-                <label className="upload-btn">
-                  {uploadingSkin ? 'Загрузка...' : 'Загрузить скин'}
-                  <input type="file" accept=".png" onChange={(e) => handleFileUpload(e, 'skin')} disabled={uploadingSkin} hidden />
-                </label>
-                {user.skinUrl && (
-                  <button onClick={() => handleRemove('skin')} className="remove-btn">Удалить</button>
-                )}
-              </div>
+        <div className="profile-tabs">
+          <button 
+            className={`profile-tab ${activeTab === 'wardrobe' ? 'active' : ''}`}
+            onClick={() => setActiveTab('wardrobe')}
+          >
+            Мой гардероб
+          </button>
+          <button 
+            className={`profile-tab ${activeTab === 'catalog' ? 'active' : ''}`}
+            onClick={() => setActiveTab('catalog')}
+          >
+            Каталог скинов
+          </button>
+        </div>
+
+        {activeTab === 'wardrobe' && (
+          <div className="profile-grid">
+            <div className="profile-viewer" ref={viewerRef}>
+              {/* Skinview3D goes here */}
             </div>
             
-            <div className="control-group">
-              <h3>Ваш плащ</h3>
-              <p>Рекомендуемый размер 64x32 или 22x17 (PNG)</p>
-              <div className="btn-row">
-                <label className="upload-btn">
-                  {uploadingCape ? 'Загрузка...' : 'Загрузить плащ'}
-                  <input type="file" accept=".png" onChange={(e) => handleFileUpload(e, 'cape')} disabled={uploadingCape} hidden />
-                </label>
-                {user.capeUrl && (
-                  <button onClick={() => handleRemove('cape')} className="remove-btn">Удалить</button>
-                )}
+            <div className="profile-controls">
+              <div className="control-group">
+                <h3>Ваш скин</h3>
+                <p>Рекомендуемый размер 64x64 или 64x32 (PNG)</p>
+                <div className="btn-row">
+                  <label className="upload-btn">
+                    {uploadingSkin ? 'Загрузка...' : 'Загрузить скин'}
+                    <input type="file" accept=".png" onChange={(e) => handleFileUpload(e, 'skin')} disabled={uploadingSkin} hidden />
+                  </label>
+                  {user.skinUrl && (
+                    <button onClick={() => handleRemove('skin')} className="remove-btn">Удалить</button>
+                  )}
+                </div>
+              </div>
+              
+              <div className="control-group">
+                <h3>Ваш плащ</h3>
+                <p>Рекомендуемый размер 64x32 или 22x17 (PNG)</p>
+                <div className="btn-row">
+                  <label className="upload-btn">
+                    {uploadingCape ? 'Загрузка...' : 'Загрузить плащ'}
+                    <input type="file" accept=".png" onChange={(e) => handleFileUpload(e, 'cape')} disabled={uploadingCape} hidden />
+                  </label>
+                  {user.capeUrl && (
+                    <button onClick={() => handleRemove('cape')} className="remove-btn">Удалить</button>
+                  )}
+                </div>
+              </div>
+
+              <div className="info-box">
+                <p>💡 Чтобы другие игроки видели ваши скины, им необходимо установить мод <strong>PG Sync</strong>. Мод автоматически подхватит загруженные здесь текстуры.</p>
               </div>
             </div>
-
-            <div className="info-box">
-              <p>💡 Чтобы другие игроки видели ваши скины, им необходимо установить мод <strong>PG Sync</strong>. Мод автоматически подхватит загруженные здесь текстуры.</p>
-            </div>
           </div>
-        </div>
+        )}
         
-        <SkinBrowser onSkinUpdated={() => {
-          // Re-trigger the SkinViewer update by reloading the page or we just let it update through state
-          // The state `user.skinUrl` is updated by updateUser in SkinBrowser, which triggers the useEffect
-        }} />
+        {activeTab === 'catalog' && (
+          <SkinBrowser onSkinUpdated={() => {
+            // Re-trigger the SkinViewer update by reloading the page or we just let it update through state
+            // The state `user.skinUrl` is updated by updateUser in SkinBrowser, which triggers the useEffect
+          }} />
+        )}
       </div>
     </>
   );

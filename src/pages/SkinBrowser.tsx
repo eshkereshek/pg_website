@@ -1,5 +1,6 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import axios from 'axios';
+import { SkinViewer, WalkingAnimation } from 'skinview3d';
 import { useAuth, API_URL } from '../contexts/AuthContext';
 import './SkinBrowser.css';
 
@@ -12,6 +13,47 @@ interface SkinBrowserProps {
   onSkinUpdated: () => void;
 }
 
+function SkinPreview3D({ url }: { url: string }) {
+  const containerRef = useRef<HTMLDivElement>(null);
+  const [viewer, setViewer] = useState<SkinViewer | null>(null);
+
+  useEffect(() => {
+    if (containerRef.current && !viewer) {
+      const newViewer = new SkinViewer({
+        canvas: document.createElement('canvas'),
+        width: 100,
+        height: 180,
+        skin: `https://api.allorigins.win/raw?url=${encodeURIComponent(url)}`
+      });
+      // We don't want animation to lag the browser, so we make it static initially.
+      // The user can still rotate it by dragging.
+      containerRef.current.appendChild(newViewer.canvas);
+      setViewer(newViewer);
+    }
+  }, [url, viewer]);
+
+  const handleMouseEnter = () => {
+    if (viewer) {
+      viewer.animation = new WalkingAnimation();
+    }
+  };
+
+  const handleMouseLeave = () => {
+    if (viewer) {
+      viewer.animation = null;
+    }
+  };
+
+  return (
+    <div 
+      className="skin-3d-preview" 
+      ref={containerRef}
+      onMouseEnter={handleMouseEnter}
+      onMouseLeave={handleMouseLeave}
+    />
+  );
+}
+
 export default function SkinBrowser({ onSkinUpdated }: SkinBrowserProps) {
   const { token, user, updateUser } = useAuth();
   const [skins, setSkins] = useState<Skin[]>([]);
@@ -22,7 +64,7 @@ export default function SkinBrowser({ onSkinUpdated }: SkinBrowserProps) {
   const fetchSkins = async (pageNum: number) => {
     setLoading(true);
     try {
-      const res = await axios.get(`https://api.mineskin.org/get/list/${pageNum}?size=16`);
+      const res = await axios.get(`https://api.mineskin.org/get/list/${pageNum}?size=12`);
       if (res.data && res.data.skins) {
         setSkins(res.data.skins);
       }
@@ -39,13 +81,11 @@ export default function SkinBrowser({ onSkinUpdated }: SkinBrowserProps) {
   const applySkin = async (skin: Skin) => {
     setApplying(skin.id);
     try {
-      // Fetch the image blob through CORS proxy
       const proxyUrl = `https://api.allorigins.win/raw?url=${encodeURIComponent(skin.url)}`;
       const imageRes = await fetch(proxyUrl);
       const blob = await imageRes.blob();
       const file = new File([blob], `skin_${skin.id}.png`, { type: 'image/png' });
 
-      // Upload it
       const formData = new FormData();
       formData.append('skin', file);
 
@@ -80,14 +120,7 @@ export default function SkinBrowser({ onSkinUpdated }: SkinBrowserProps) {
         <div className="skin-browser-grid">
           {skins.map(skin => (
             <div key={skin.id} className="skin-card">
-              <div className="skin-preview-container">
-                <div 
-                  className="skin-head-preview"
-                  style={{
-                    backgroundImage: `url(https://api.allorigins.win/raw?url=${encodeURIComponent(skin.url)})`
-                  }}
-                />
-              </div>
+              <SkinPreview3D url={skin.url} />
               <button 
                 className="skin-apply-btn" 
                 onClick={() => applySkin(skin)}
