@@ -1,7 +1,6 @@
 import { useState, useRef, useEffect } from 'react';
 import axios from 'axios';
-import { useAuth } from '../context/AuthContext';
-import { API_URL } from '../config';
+import { useAuth, API_URL } from '../contexts/AuthContext';
 import { SkinViewer, WalkingAnimation } from 'skinview3d';
 import './SkinBrowser.css';
 
