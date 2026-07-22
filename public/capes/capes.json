@@ -1,0 +1,27 @@
+[
+  {
+    "id": "mojang_classic",
+    "name": "Mojang Classic",
+    "url": "/capes/mojang_classic.png"
+  },
+  {
+    "id": "minecon_2011",
+    "name": "Minecon 2011",
+    "url": "/capes/minecon_2011.png"
+  },
+  {
+    "id": "minecon_2013",
+    "name": "Minecon 2013",
+    "url": "/capes/minecon_2013.png"
+  },
+  {
+    "id": "optifine_red",
+    "name": "OptiFine Red",
+    "url": "/capes/optifine_red.png"
+  },
+  {
+    "id": "migrator",
+    "name": "Migrator",
+    "url": "/capes/migrator.png"
+  }
+]

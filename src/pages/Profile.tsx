@@ -17,36 +17,65 @@ export default function Profile() {
   const [uploadingCape, setUploadingCape] = useState(false);
 
   useEffect(() => {
-    if (!isLoading && !user) {
-      navigate('/login');
-    }
-  }, [user, isLoading, navigate]);
+  const [isLoading, setIsLoading] = useState(true);
 
+  // Initialize Auth
   useEffect(() => {
-    if (viewerRef.current && !skinViewer && user) {
-      const viewer = new SkinViewer({
+    // wait for auth
+    if (!token) {
+      // should be redirected by ProtectedRoute
+    } else {
+      setIsLoading(false);
+    }
+  }, [token]);
+
+  // Handle SkinViewer setup
+  useEffect(() => {
+    if (!user || activeTab !== 'wardrobe') return;
+
+    if (!skinViewerInstance.current && viewerRef.current) {
+      skinViewerInstance.current = new SkinViewer({
         canvas: document.createElement('canvas'),
         width: 300,
         height: 400,
-        skin: user.skinUrl || 'https://minotar.net/skin/Steve.png',
-        cape: user.capeUrl || undefined
+        animation: new WalkingAnimation()
       });
-      viewer.animation = new WalkingAnimation();
-      viewerRef.current.appendChild(viewer.canvas);
-      setSkinViewer(viewer);
+      viewerRef.current.appendChild(skinViewerInstance.current.canvas);
+      
+      // Setup controls
+      const control = new createOrbitControls(skinViewerInstance.current);
+      control.enableZoom = true;
+      control.enablePan = false;
     }
-  }, [viewerRef, user, skinViewer]);
 
-  useEffect(() => {
-    if (skinViewer && user) {
-      skinViewer.loadSkin(user.skinUrl || 'https://minotar.net/skin/Steve.png');
-      if (user.capeUrl) {
-        skinViewer.loadCape(user.capeUrl);
+    if (skinViewerInstance.current) {
+      const viewer = skinViewerInstance.current;
+      
+      if (user.skinUrl) {
+        viewer.loadSkin(user.skinUrl, { model: 'auto' }).catch(console.error);
       } else {
-        skinViewer.resetCape();
+        // default steve
+        viewer.loadSkin('https://textures.minecraft.net/texture/1a4af718455d4aab528e7a61f86fa25e6a369d1768dcb13f7df319a713eb810b').catch(console.error);
+      }
+
+      if (user.capeUrl) {
+        viewer.loadCape(user.capeUrl).catch(console.error);
+      } else {
+        viewer.resetCape();
       }
     }
-  }, [user, skinViewer]);
+
+    // Cleanup on unmount or tab change
+    return () => {
+      if (skinViewerInstance.current) {
+        skinViewerInstance.current.dispose();
+        if (viewerRef.current && viewerRef.current.contains(skinViewerInstance.current.canvas)) {
+          viewerRef.current.removeChild(skinViewerInstance.current.canvas);
+        }
+        skinViewerInstance.current = null;
+      }
+    };
+  }, [user, activeTab]);
 
   const handleFileUpload = async (e: React.ChangeEvent<HTMLInputElement>, type: 'skin' | 'cape') => {
     const file = e.target.files?.[0];
@@ -132,6 +161,12 @@ export default function Profile() {
           >
             Каталог скинов
           </button>
+          <button 
+            className={`profile-tab ${activeTab === 'capes' ? 'active' : ''}`}
+            onClick={() => setActiveTab('capes')}
+          >
+            Каталог плащей
+          </button>
         </div>
 
         <div className="profile-grid" style={{ display: activeTab === 'wardrobe' ? 'grid' : 'none' }}>
@@ -176,8 +211,13 @@ export default function Profile() {
         
         <div style={{ display: activeTab === 'catalog' ? 'block' : 'none' }}>
           <SkinBrowser onSkinUpdated={() => {
-            // Re-trigger the SkinViewer update by reloading the page or we just let it update through state
-            // The state `user.skinUrl` is updated by updateUser in SkinBrowser, which triggers the useEffect
+            // Update through state
+          }} />
+        </div>
+
+        <div style={{ display: activeTab === 'capes' ? 'block' : 'none' }}>
+          <CapeBrowser onSkinUpdated={() => {
+            // Update through state
           }} />
         </div>
       </div>
