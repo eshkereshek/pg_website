@@ -51,7 +51,6 @@ function SkinPreview3D({ url }: { url: string }) {
   const containerRef = useRef<HTMLDivElement>(null);
   const [snapshot, setSnapshot] = useState<string | null>(null);
   const [isHovered, setIsHovered] = useState(false);
-  const [viewer, setViewer] = useState<SkinViewer | null>(null);
 
   useEffect(() => {
     let active = true;
@@ -71,7 +70,6 @@ function SkinPreview3D({ url }: { url: string }) {
         animation: new WalkingAnimation()
       });
       containerRef.current.appendChild(newViewer.canvas);
-      setViewer(newViewer);
       
       return () => {
         newViewer.dispose();
@@ -89,7 +87,6 @@ function SkinPreview3D({ url }: { url: string }) {
       onMouseEnter={() => setIsHovered(true)}
       onMouseLeave={() => {
         setIsHovered(false);
-        setViewer(null);
       }}
     >
       {!isHovered && snapshot && (
