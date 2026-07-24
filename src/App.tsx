@@ -72,7 +72,7 @@ function App() {
           <h1 className="hero-main-title">
             <span className="hero-title-top">ТВОЙ НОВЫЙ ЛЮБИМЫЙ</span>
             <span className="hero-title-bottom">
-              <span className="hero-pixel-heart">❤</span> <span className="hero-highlight">MINECRAFT</span> ЛАУНЧЕР
+              <span className="hero-highlight">MINECRAFT</span> ЛАУНЧЕР
             </span>
           </h1>
         </div>
