@@ -99,7 +99,13 @@ function DownloadPage() {
         >
           ↑
         </button>
-        <p>© {new Date().getFullYear()} Pagrysha Launcher. Все права защищены. <Link to="/terms" style={{color: '#aaa'}}>Соглашение</Link> | <Link to="/privacy" style={{color: '#aaa'}}>Конфиденциальность</Link> | <a href="https://github.com/eshkereshek/pg_launcher" target="_blank" rel="noreferrer" style={{color: '#666'}}>Open Source на GitHub</a></p>
+        <p>© {new Date().getFullYear()} Pagrysha Launcher. Все права защищены.</p>
+        <p style={{ marginTop: '8px' }}>
+          Электронная почта: <a href="mailto:pagrysha.launcher@gmail.com" style={{ color: 'var(--pg-yellow)', fontWeight: '500' }}>pagrysha.launcher@gmail.com</a>
+        </p>
+        <p style={{ marginTop: '8px' }}>
+          <Link to="/terms" style={{color: '#aaa'}}>Соглашение</Link> | <Link to="/privacy" style={{color: '#aaa'}}>Конфиденциальность</Link> | <a href="https://github.com/eshkereshek/pg_launcher" target="_blank" rel="noreferrer" style={{color: '#666'}}>Open Source на GitHub</a>
+        </p>
         <p style={{marginTop: '15px', fontSize: '10px', color: '#888', textTransform: 'uppercase', letterSpacing: '1px'}}>НЕ ОФИЦИАЛЬНЫЙ ПРОДУКТ MINECRAFT. НЕ ОДОБРЕН MOJANG И НЕ СВЯЗАН С НИМИ.</p>
       </footer>
     </div>

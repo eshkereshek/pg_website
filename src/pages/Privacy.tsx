@@ -123,7 +123,13 @@ export default function Privacy() {
           <section className="terms-section">
             <h2>8. Контакты и Вопросы</h2>
             <p>
-              Если у вас возникли вопросы по поводу обработки ваших данных, вы можете связаться с нами в репозитории проекта:
+              Если у вас возникли вопросы по поводу обработки ваших данных, вы можете связаться с нами по электронной почте или в репозитории проекта:
+            </p>
+            <p>
+              <strong>Электронная почта:</strong>{' '}
+              <a href="mailto:pagrysha.launcher@gmail.com" style={{ color: 'var(--pg-yellow)', fontWeight: 'bold' }}>
+                pagrysha.launcher@gmail.com
+              </a>
             </p>
             <p>
               <strong>GitHub:</strong>{' '}
@@ -144,7 +150,13 @@ export default function Privacy() {
         >
           ↑
         </button>
-        <p>© {new Date().getFullYear()} Pagrysha Launcher. Все права защищены. <Link to="/terms">Соглашение</Link> | <Link to="/privacy">Конфиденциальность</Link> | <a href="https://github.com/eshkereshek/pg_launcher" target="_blank" rel="noreferrer">GitHub</a></p>
+        <p>© {new Date().getFullYear()} Pagrysha Launcher. Все права защищены.</p>
+        <p style={{ marginTop: '8px' }}>
+          Электронная почта: <a href="mailto:pagrysha.launcher@gmail.com" style={{ color: 'var(--pg-yellow)', fontWeight: '500' }}>pagrysha.launcher@gmail.com</a>
+        </p>
+        <p style={{ marginTop: '8px' }}>
+          <Link to="/terms">Соглашение</Link> | <Link to="/privacy">Конфиденциальность</Link> | <a href="https://github.com/eshkereshek/pg_launcher" target="_blank" rel="noreferrer">GitHub</a>
+        </p>
         <p style={{marginTop: '15px', fontSize: '10px', color: '#555', textTransform: 'uppercase', letterSpacing: '1px'}}>НЕ ОФИЦИАЛЬНЫЙ ПРОДУКТ MINECRAFT. НЕ ОДОБРЕН MOJANG И НЕ СВЯЗАН С НИМИ.</p>
       </footer>
     </div>
