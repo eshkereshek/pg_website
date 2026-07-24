@@ -103,7 +103,31 @@ function App() {
           <div className="bento-card col-span-2">
             <h3>Устанавливайте популярные сборки в один клик</h3>
             <p>Играйте только на лучших сборках с самых популярных сайтов.</p>
-            <p style={{marginTop: 'auto', fontSize: '12px', color: '#666', textTransform: 'uppercase', fontWeight: 'bold', display: 'flex', alignItems: 'center', gap: '8px'}}>Мы поддерживаем: <span style={{color: '#1bd96a', fontSize: '14px', textTransform: 'none'}}>Modrinth</span></p>
+            <p style={{marginTop: 'auto', fontSize: '12px', color: '#666', textTransform: 'uppercase', fontWeight: 'bold', display: 'flex', alignItems: 'center', gap: '8px'}}>
+              Мы поддерживаем:{' '}
+              <a 
+                href="https://modrinth.com" 
+                target="_blank" 
+                rel="noreferrer" 
+                className="modrinth-link"
+                style={{
+                  color: '#1bd96a', 
+                  fontSize: '14px', 
+                  textTransform: 'none', 
+                  display: 'inline-flex', 
+                  alignItems: 'center', 
+                  gap: '6px', 
+                  textDecoration: 'none',
+                  fontWeight: 'bold',
+                  transition: 'color 0.2s, transform 0.2s'
+                }}
+              >
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="#1bd96a">
+                  <path d="M12.252 2c-5.514 0-10 4.486-10 10 0 2.223.729 4.278 1.957 5.947l.951-1.647a7.95 7.95 0 0 1-1.008-3.3c0-4.411 3.589-8 8.1-8 4.411 0 8 3.589 8 8a7.95 7.95 0 0 1-1.008 3.3l.951 1.647A9.957 9.957 0 0 0 22.252 12c0-5.514-4.486-10-10-10zm-1.854 5.09-3.708 6.42 2.766 4.79 3.708-6.42-2.766-4.79zm3.708 0-2.766 4.79 3.708 6.42 2.766-4.79-3.708-6.42z"/>
+                </svg>
+                Modrinth
+              </a>
+            </p>
           </div>
           <div className="bento-card">
             <h3>Продвинутые настройки</h3>

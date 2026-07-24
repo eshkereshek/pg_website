@@ -307,6 +307,16 @@ h1, h2, h3 {
   transform: perspective(1000px) rotateX(0deg) translateY(-10px);
 }
 
+.modrinth-link:hover {
+  color: #00ff75 !important;
+  text-decoration: underline !important;
+  transform: translateY(-1px);
+}
+
+.modrinth-link:hover svg {
+  fill: #00ff75 !important;
+}
+
 /* Features Section */
 .features {
   padding: 100px 20px;
