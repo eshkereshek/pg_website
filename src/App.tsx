@@ -54,6 +54,7 @@ function App() {
         </a>
         <div className="nav-links">
           <Link to="/download">Скачать</Link>
+          <Link to="/help">Help</Link>
           <a href="https://github.com/eshkereshek/pg_launcher" target="_blank" rel="noreferrer">GitHub</a>
           {isAuthenticated ? (
             <Link to="/profile" className="nav-btn">Мой Аккаунт</Link>
