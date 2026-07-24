@@ -35,7 +35,7 @@ function DownloadPage() {
             <p className="download-hero-os">Windows 7, 8, 10, 11</p>
 
             <p className="download-hero-disclaimer">
-              При скачивании и использовании Pagrysha Launcher, вы соглашаетесь с <a href="#">пользовательским соглашением</a> и <a href="#">политикой конфиденциальности</a>.
+              При скачивании и использовании Pagrysha Launcher, вы соглашаетесь с <Link to="/terms">пользовательским соглашением</Link> и <Link to="/privacy">политикой конфиденциальности</Link>.
             </p>
           </div>
           
@@ -99,7 +99,7 @@ function DownloadPage() {
         >
           ↑
         </button>
-        <p>© {new Date().getFullYear()} Pagrysha Launcher. Все права защищены. <a href="https://github.com/eshkereshek/pg_launcher" target="_blank" rel="noreferrer" style={{color: '#666'}}>Open Source на GitHub</a></p>
+        <p>© {new Date().getFullYear()} Pagrysha Launcher. Все права защищены. <Link to="/terms" style={{color: '#aaa'}}>Соглашение</Link> | <Link to="/privacy" style={{color: '#aaa'}}>Конфиденциальность</Link> | <a href="https://github.com/eshkereshek/pg_launcher" target="_blank" rel="noreferrer" style={{color: '#666'}}>Open Source на GitHub</a></p>
         <p style={{marginTop: '15px', fontSize: '10px', color: '#888', textTransform: 'uppercase', letterSpacing: '1px'}}>НЕ ОФИЦИАЛЬНЫЙ ПРОДУКТ MINECRAFT. НЕ ОДОБРЕН MOJANG И НЕ СВЯЗАН С НИМИ.</p>
       </footer>
     </div>

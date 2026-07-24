@@ -75,6 +75,9 @@ export default function Register() {
           
           <div className="auth-footer">
             Уже есть аккаунт? <Link to="/login">Войти</Link>
+            <p style={{ fontSize: '11px', color: '#777', marginTop: '15px', lineHeight: '1.4' }}>
+              Регистрируясь, вы принимаете <Link to="/terms" style={{ color: '#aaa', textDecoration: 'underline' }}>пользовательское соглашение</Link> и <Link to="/privacy" style={{ color: '#aaa', textDecoration: 'underline' }}>политику конфиденциальности</Link>.
+            </p>
           </div>
         </div>
         </div>

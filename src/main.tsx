@@ -7,6 +7,8 @@ import DownloadPage from './DownloadPage.tsx'
 import Login from './pages/Login.tsx'
 import Register from './pages/Register.tsx'
 import Profile from './pages/Profile.tsx'
+import Terms from './pages/Terms.tsx'
+import Privacy from './pages/Privacy.tsx'
 import { AuthProvider } from './contexts/AuthContext.tsx'
 
 createRoot(document.getElementById('root')!).render(
@@ -19,6 +21,8 @@ createRoot(document.getElementById('root')!).render(
           <Route path="/login" element={<Login />} />
           <Route path="/register" element={<Register />} />
           <Route path="/profile" element={<Profile />} />
+          <Route path="/terms" element={<Terms />} />
+          <Route path="/privacy" element={<Privacy />} />
         </Routes>
       </HashRouter>
     </AuthProvider>

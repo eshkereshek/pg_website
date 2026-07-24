@@ -165,7 +165,7 @@ function App() {
         >
           ↑
         </button>
-        <p>© {new Date().getFullYear()} Pagrysha Launcher. Все права защищены. <a href="https://github.com/eshkereshek/pg_launcher" target="_blank" rel="noreferrer">Open Source на GitHub</a></p>
+        <p>© {new Date().getFullYear()} Pagrysha Launcher. Все права защищены. <Link to="/terms">Пользовательское соглашение</Link> | <Link to="/privacy">Политика конфиденциальности</Link> | <a href="https://github.com/eshkereshek/pg_launcher" target="_blank" rel="noreferrer">Open Source на GitHub</a></p>
         <p style={{marginTop: '15px', fontSize: '10px', color: '#555', textTransform: 'uppercase', letterSpacing: '1px'}}>НЕ ОФИЦИАЛЬНЫЙ ПРОДУКТ MINECRAFT. НЕ ОДОБРЕН MOJANG И НЕ СВЯЗАН С НИМИ.</p>
       </footer>
     </>
