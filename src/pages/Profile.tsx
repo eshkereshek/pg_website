@@ -115,7 +115,7 @@ export default function Profile() {
   }
 
   return (
-    <>
+    <div className="profile-page">
       <nav className="navbar">
         <Link to="/" className="nav-brand">
           <img src="/newicon.png" alt="Pagrysha Launcher" />
@@ -199,6 +199,6 @@ export default function Profile() {
           <CapeBrowser onSkinUpdated={() => {}} />
         </div>
       </div>
-    </>
+    </div>
   );
 }
