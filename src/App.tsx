@@ -64,7 +64,7 @@ function App() {
       </nav>
 
       <section className="hero">
-        <img src="/bg-minecraft.png" alt="background" className="hero-bg" />
+        <img src="/bg-minecraftnew.png" alt="background" className="hero-bg" />
         <div className="hero-overlay"></div>
         
         <h1>Твой новый любимый <span className="hero-highlight">Minecraft</span> лаунчер</h1>

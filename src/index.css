@@ -728,7 +728,7 @@ h1, h2, h3 {
 }
 
 .auth-page {
-  background-image: url('/lvbck.jpg');
+  background-image: url('/bg.png');
   background-size: cover;
   background-position: center;
   min-height: 100vh;
