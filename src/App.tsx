@@ -68,7 +68,14 @@ function App() {
         <img src="/bg-minecraftnew.png" alt="background" className="hero-bg" />
         <div className="hero-overlay"></div>
         
-        <h1>Твой новый любимый <span className="hero-highlight">Minecraft</span> лаунчер</h1>
+        <div className="hero-title-wrapper">
+          <h1 className="hero-main-title">
+            <span className="hero-title-top">ТВОЙ НОВЫЙ ЛЮБИМЫЙ</span>
+            <span className="hero-title-bottom">
+              <span className="hero-pixel-heart">❤</span> <span className="hero-highlight">MINECRAFT</span> ЛАУНЧЕР
+            </span>
+          </h1>
+        </div>
         <p>Устанавливай все версии игры, популярные сборки модов и заходи с аккаунтом Ely.by в один клик. Погнали играть с друзьями!</p>
         
         <Link to="/download" className="download-btn">
