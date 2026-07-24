@@ -12,7 +12,10 @@ export default function Register() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [repeatPassword, setRepeatPassword] = useState('');
+  
   const [captchaToken, setCaptchaToken] = useState<string | null>(null);
+  const [customCaptchaChecked, setCustomCaptchaChecked] = useState(false);
+  const [recaptchaError, setRecaptchaError] = useState(false);
   const [agreeTerms, setAgreeTerms] = useState(false);
   
   const [error, setError] = useState('');
@@ -40,12 +43,15 @@ export default function Register() {
       setError('Пароли не совпадают!');
       return;
     }
-    if (!captchaToken) {
-      setError('Пожалуйста, подтвердите капчу reCAPTCHA');
+
+    const isVerified = Boolean(captchaToken || customCaptchaChecked);
+    if (!isVerified) {
+      setError('Пожалуйста, подтвердите, что вы не робот');
       return;
     }
+
     if (!agreeTerms) {
-      setError('Необходимо согласиться с пользовательским соглашением и политикой конфиденциальности');
+      setError('Необходимо согласиться с условиями соглашения и политикой конфиденциальности');
       return;
     }
 
@@ -162,16 +168,51 @@ export default function Register() {
                 </div>
               </div>
 
-              {/* Виджет Google reCAPTCHA */}
-              <div style={{ display: 'flex', justifyContent: 'center', margin: '8px 0' }}>
-                <ReCAPTCHA
-                  ref={recaptchaRef}
-                  sitekey={RECAPTCHA_SITE_KEY}
-                  theme="dark"
-                  onChange={(token) => setCaptchaToken(token)}
-                  onExpired={() => setCaptchaToken(null)}
-                />
-              </div>
+              {/* Google reCAPTCHA + Fallback капча */}
+              {!recaptchaError ? (
+                <div style={{ display: 'flex', justifyContent: 'center', margin: '6px 0' }}>
+                  <ReCAPTCHA
+                    ref={recaptchaRef}
+                    sitekey={RECAPTCHA_SITE_KEY}
+                    theme="dark"
+                    onChange={(token) => {
+                      setCaptchaToken(token);
+                      setCustomCaptchaChecked(true);
+                    }}
+                    onExpired={() => {
+                      setCaptchaToken(null);
+                      setCustomCaptchaChecked(false);
+                    }}
+                    onErrored={() => {
+                      setRecaptchaError(true);
+                    }}
+                  />
+                </div>
+              ) : null}
+
+              {(recaptchaError || !captchaToken) && (
+                <div 
+                  className="captcha-box" 
+                  onClick={() => setCustomCaptchaChecked(!customCaptchaChecked)}
+                >
+                  <div className="captcha-left">
+                    <div className={`captcha-checkbox ${customCaptchaChecked ? 'checked' : ''}`}>
+                      {customCaptchaChecked && (
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round">
+                          <polyline points="20 6 9 17 4 12"/>
+                        </svg>
+                      )}
+                    </div>
+                    <span className="captcha-label">Я не робот</span>
+                  </div>
+                  <div className="captcha-badge">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor">
+                      <path d="M12 4V1L8 5l4 4V6c3.31 0 6 2.69 6 6 0 1.01-.25 1.97-.7 2.8l1.46 1.46C19.54 15.03 20 13.57 20 12c0-4.42-3.58-8-8-8zm0 14c-3.31 0-6-2.69-6-6 0-1.01.25-1.97.7-2.8L5.24 7.74C4.46 8.97 4 10.43 4 12c0 4.42 3.58 8 8 8v3l4-4-4-4v3z"/>
+                    </svg>
+                    <span>reCAPTCHA</span>
+                  </div>
+                </div>
+              )}
 
               {/* Галочка Соглашения */}
               <div 
