@@ -1031,12 +1031,12 @@ h1, h2, h3 {
   display: flex;
   justify-content: center;
   align-items: center;
-  background: rgba(20, 20, 20, 0.5);
-  border: 2px solid var(--pg-dark3);
+  background: #1e1e1e;
+  border: 2px solid #000;
   border-radius: 0;
   padding: 2rem;
   height: 500px;
-  box-shadow: 10px 10px 0 rgba(0,0,0,0.5);
+  box-shadow: inset -2px -2px 0 0 #101010, inset 2px 2px 0 0 #3a3a3a, 10px 10px 0 rgba(0,0,0,0.6);
 }
 
 .profile-viewer canvas {
@@ -1050,16 +1050,19 @@ h1, h2, h3 {
 }
 
 .control-group {
-  background: rgba(30, 30, 30, 0.4);
+  background: #272727;
   padding: 2rem;
   border-radius: 0;
-  border: 2px solid var(--pg-dark3);
-  box-shadow: 8px 8px 0 rgba(0,0,0,0.5);
+  border: 2px solid #000;
+  box-shadow: inset -2px -2px 0 0 #121212, inset 2px 2px 0 0 #444444, 8px 8px 0 rgba(0,0,0,0.6);
 }
 
 .control-group h3 {
+  font-family: 'Blocks', sans-serif;
   font-size: 1.5rem;
   margin-bottom: 0.5rem;
+  color: #ffffff;
+  text-shadow: 1px 1px 0 #000;
 }
 
 .control-group p {
@@ -1125,13 +1128,14 @@ h1, h2, h3 {
 }
 
 .info-box {
-  background: rgba(241, 196, 15, 0.1);
+  background: #232323;
   border-left: 4px solid var(--pg-yellow);
   padding: 1.5rem;
   border-radius: 0;
-  border-top: 1px solid var(--pg-dark3);
-  border-right: 1px solid var(--pg-dark3);
-  border-bottom: 1px solid var(--pg-dark3);
+  border-top: 2px solid #000;
+  border-right: 2px solid #000;
+  border-bottom: 2px solid #000;
+  box-shadow: inset -2px -2px 0 0 #121212, inset 2px 2px 0 0 #404040, 8px 8px 0 rgba(0,0,0,0.6);
 }
 
 .info-box p {
