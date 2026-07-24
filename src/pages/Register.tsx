@@ -1,55 +1,24 @@
-import { useState, useEffect } from 'react';
+import { useState, useRef } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import axios from 'axios';
+import ReCAPTCHA from 'react-google-recaptcha';
 import { API_URL } from '../contexts/AuthContext';
 import '../index.css';
 
 const RECAPTCHA_SITE_KEY = '6LcQSmMtAAAAAF8O-4ESgGNidPjiwYypK8UmLuH8';
-
-declare global {
-  interface Window {
-    grecaptcha: any;
-  }
-}
 
 export default function Register() {
   const [username, setUsername] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [repeatPassword, setRepeatPassword] = useState('');
-  
-  const [isRobotVerified, setIsRobotVerified] = useState(false);
+  const [captchaToken, setCaptchaToken] = useState<string | null>(null);
   const [agreeTerms, setAgreeTerms] = useState(false);
   
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
+  const recaptchaRef = useRef<ReCAPTCHA>(null);
   const navigate = useNavigate();
-
-  // Загружаем скрипт reCAPTCHA v3
-  useEffect(() => {
-    if (!document.getElementById('recaptcha-v3-script')) {
-      const script = document.createElement('script');
-      script.id = 'recaptcha-v3-script';
-      script.src = `https://www.google.com/recaptcha/api.js?render=${RECAPTCHA_SITE_KEY}`;
-      script.async = true;
-      document.body.appendChild(script);
-    }
-  }, []);
-
-  // Функция для получения токена reCAPTCHA v3
-  const getReCaptchaV3Token = (): Promise<string | null> => {
-    return new Promise((resolve) => {
-      if (window.grecaptcha) {
-        window.grecaptcha.ready(() => {
-          window.grecaptcha.execute(RECAPTCHA_SITE_KEY, { action: 'register' })
-            .then((token: string) => resolve(token))
-            .catch(() => resolve(null));
-        });
-      } else {
-        resolve(null);
-      }
-    });
-  };
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -71,8 +40,8 @@ export default function Register() {
       setError('Пароли не совпадают!');
       return;
     }
-    if (!isRobotVerified) {
-      setError('Пожалуйста, подтвердите, что вы не робот');
+    if (!captchaToken) {
+      setError('Пожалуйста, подтвердите капчу reCAPTCHA');
       return;
     }
     if (!agreeTerms) {
@@ -83,9 +52,6 @@ export default function Register() {
     setLoading(true);
 
     try {
-      // Получаем фоновый токен reCAPTCHA v3
-      const captchaToken = await getReCaptchaV3Token();
-
       await axios.post(`${API_URL}/auth/register`, { 
         username, 
         email, 
@@ -95,6 +61,8 @@ export default function Register() {
       navigate('/login');
     } catch (err: any) {
       setError(err.response?.data?.message || 'Ошибка при регистрации');
+      recaptchaRef.current?.reset();
+      setCaptchaToken(null);
     } finally {
       setLoading(false);
     }
@@ -194,27 +162,15 @@ export default function Register() {
                 </div>
               </div>
 
-              {/* Интерактивный блок "Я не робот" */}
-              <div 
-                className="captcha-box" 
-                onClick={() => setIsRobotVerified(!isRobotVerified)}
-              >
-                <div className="captcha-left">
-                  <div className={`captcha-checkbox ${isRobotVerified ? 'checked' : ''}`}>
-                    {isRobotVerified && (
-                      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round">
-                        <polyline points="20 6 9 17 4 12"/>
-                      </svg>
-                    )}
-                  </div>
-                  <span className="captcha-label">Я не робот</span>
-                </div>
-                <div className="captcha-badge">
-                  <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor">
-                    <path d="M12 4V1L8 5l4 4V6c3.31 0 6 2.69 6 6 0 1.01-.25 1.97-.7 2.8l1.46 1.46C19.54 15.03 20 13.57 20 12c0-4.42-3.58-8-8-8zm0 14c-3.31 0-6-2.69-6-6 0-1.01.25-1.97.7-2.8L5.24 7.74C4.46 8.97 4 10.43 4 12c0 4.42 3.58 8 8 8v3l4-4-4-4v3z"/>
-                  </svg>
-                  <span>reCAPTCHA v3</span>
-                </div>
+              {/* Официальный виджет Google reCAPTCHA v2 (Флажок) */}
+              <div style={{ display: 'flex', justifyContent: 'center', margin: '10px 0' }}>
+                <ReCAPTCHA
+                  ref={recaptchaRef}
+                  sitekey={RECAPTCHA_SITE_KEY}
+                  theme="dark"
+                  onChange={(token) => setCaptchaToken(token)}
+                  onExpired={() => setCaptchaToken(null)}
+                />
               </div>
 
               {/* Галочка Соглашения */}
