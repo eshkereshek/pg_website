@@ -5,7 +5,7 @@ import ReCAPTCHA from 'react-google-recaptcha';
 import { API_URL } from '../contexts/AuthContext';
 import '../index.css';
 
-const RECAPTCHA_SITE_KEY = '6LcQSmMtAAAAAF8O-4ESgGNidPjiwYypK8UmLuH8';
+const RECAPTCHA_SITE_KEY = '6LfsTWMtAAAAABtS5XyONnSjxgfqoG-mGpZAIenm';
 
 export default function Register() {
   const [username, setUsername] = useState('');
