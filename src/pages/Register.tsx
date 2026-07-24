@@ -1,19 +1,23 @@
-import { useState } from 'react';
+import { useState, useRef } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import axios from 'axios';
+import ReCAPTCHA from 'react-google-recaptcha';
 import { API_URL } from '../contexts/AuthContext';
 import '../index.css';
+
+const RECAPTCHA_SITE_KEY = '6LcQSmMtAAAAAF8O-4ESgGNidPjiwYypK8UmLuH8';
 
 export default function Register() {
   const [username, setUsername] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [repeatPassword, setRepeatPassword] = useState('');
-  const [isRobotVerified, setIsRobotVerified] = useState(false);
+  const [captchaToken, setCaptchaToken] = useState<string | null>(null);
   const [agreeTerms, setAgreeTerms] = useState(false);
   
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
+  const recaptchaRef = useRef<ReCAPTCHA>(null);
   const navigate = useNavigate();
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -36,22 +40,29 @@ export default function Register() {
       setError('Пароли не совпадают!');
       return;
     }
-    if (!isRobotVerified) {
-      setError('Пожалуйста, подтвердите, что вы не робот');
+    if (!captchaToken) {
+      setError('Пожалуйста, подтвердите капчу reCAPTCHA');
       return;
     }
     if (!agreeTerms) {
-      setError('Необходимо согласиться с условиями соглашения и политикой конфиденциальности');
+      setError('Необходимо согласиться с пользовательским соглашением и политикой конфиденциальности');
       return;
     }
 
     setLoading(true);
 
     try {
-      await axios.post(`${API_URL}/auth/register`, { username, email, password });
+      await axios.post(`${API_URL}/auth/register`, { 
+        username, 
+        email, 
+        password,
+        captchaToken
+      });
       navigate('/login');
     } catch (err: any) {
       setError(err.response?.data?.message || 'Ошибка при регистрации');
+      recaptchaRef.current?.reset();
+      setCaptchaToken(null);
     } finally {
       setLoading(false);
     }
@@ -151,27 +162,15 @@ export default function Register() {
                 </div>
               </div>
 
-              {/* Капча "Я не робот" */}
-              <div 
-                className="captcha-box" 
-                onClick={() => setIsRobotVerified(!isRobotVerified)}
-              >
-                <div className="captcha-left">
-                  <div className={`captcha-checkbox ${isRobotVerified ? 'checked' : ''}`}>
-                    {isRobotVerified && (
-                      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round">
-                        <polyline points="20 6 9 17 4 12"/>
-                      </svg>
-                    )}
-                  </div>
-                  <span className="captcha-label">Я не робот</span>
-                </div>
-                <div className="captcha-badge">
-                  <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor">
-                    <path d="M12 4V1L8 5l4 4V6c3.31 0 6 2.69 6 6 0 1.01-.25 1.97-.7 2.8l1.46 1.46C19.54 15.03 20 13.57 20 12c0-4.42-3.58-8-8-8zm0 14c-3.31 0-6-2.69-6-6 0-1.01.25-1.97.7-2.8L5.24 7.74C4.46 8.97 4 10.43 4 12c0 4.42 3.58 8 8 8v3l4-4-4-4v3z"/>
-                  </svg>
-                  <span>reCAPTCHA</span>
-                </div>
+              {/* Виджет Google reCAPTCHA */}
+              <div style={{ display: 'flex', justifyContent: 'center', margin: '8px 0' }}>
+                <ReCAPTCHA
+                  ref={recaptchaRef}
+                  sitekey={RECAPTCHA_SITE_KEY}
+                  theme="dark"
+                  onChange={(token) => setCaptchaToken(token)}
+                  onExpired={() => setCaptchaToken(null)}
+                />
               </div>
 
               {/* Галочка Соглашения */}
