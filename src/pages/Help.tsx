@@ -115,7 +115,10 @@ export default function Help() {
       <div className="help-hero">
         <div className="help-hero-overlay"></div>
         <div className="help-hero-content">
-          <h1>Центр поддержки</h1>
+          <div className="help-hero-title-row">
+            <h1>Центр поддержки</h1>
+            <img src="/strider.gif" alt="Strider" className="hero-strider-gif" />
+          </div>
           <p className="help-hero-subtitle">Найдите ответы на любые вопросы по Pagrysha Launcher и Minecraft</p>
           
           <div className="help-search-box">
@@ -283,7 +286,7 @@ export default function Help() {
             </div>
 
             <div className="feedback-image">
-              <img src="/head.png" alt="Minecraft Support" />
+              <img src="/strider.gif" alt="Minecraft Strider" className="feedback-strider-gif" />
             </div>
           </div>
         </div>

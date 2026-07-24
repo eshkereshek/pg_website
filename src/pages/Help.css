@@ -32,12 +32,26 @@
   width: 100%;
 }
 
+.help-hero-title-row {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 16px;
+}
+
+.hero-strider-gif {
+  width: 64px;
+  height: auto;
+  image-rendering: pixelated;
+  filter: drop-shadow(0 4px 8px rgba(0,0,0,0.8));
+}
+
 .help-hero-content h1 {
   font-family: 'Blocks', sans-serif;
   font-size: 52px;
   color: #ffffff;
   text-shadow: 3px 3px 0 #000, 0 0 20px rgba(241, 196, 15, 0.3);
-  margin-bottom: 12px;
+  margin-bottom: 0;
   letter-spacing: 1px;
 }
 
@@ -370,9 +384,11 @@
   flex-wrap: wrap;
 }
 
-.feedback-image img {
+.feedback-image img, .feedback-strider-gif {
   max-width: 140px;
   height: auto;
+  image-rendering: pixelated;
+  filter: drop-shadow(0 8px 16px rgba(0,0,0,0.8));
 }
 
 .active-nav {
