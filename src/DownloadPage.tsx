@@ -64,20 +64,29 @@ function DownloadPage() {
           </div>
 
           {/* MacOS */}
-          <div className="version-card" style={{ gap: '10px' }}>
+          <div className="version-card">
             <div className="version-os">
               <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M17.05 20.28c-.98.95-2.05.8-3.08.35-1.09-.46-2.09-.48-3.24 0-1.44.62-2.2.44-3.06-.35C2.79 15.25 3.51 7.59 9.05 7.31c1.35.07 2.29.74 3.08.8 1.18-.19 2.31-.88 3.5-.8 1.48.06 2.62.62 3.32 1.6-2.88 1.76-2.39 5.56.57 6.78-.65 1.71-1.48 3.45-2.47 4.59zM12.03 7.25c-.15-2.23 1.66-4.07 3.74-4.25.32 2.39-1.92 4.28-3.74 4.25z"/></svg>
               MACOS
             </div>
-            <a href="https://github.com/eshkereshek/pg_launcher/releases/latest/download/Pagrysha.Launcher-7.1.6-arm64.dmg" className="version-btn" target="_blank" rel="noreferrer" style={{ fontSize: '13px', padding: '10px 12px' }}>
-              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="7 10 12 15 17 10"></polyline><line x1="12" y1="15" x2="12" y2="3"></line></svg>
-              Apple Silicon (ARM64)
-            </a>
-            <a href="https://github.com/eshkereshek/pg_launcher/releases/latest/download/Pagrysha.Launcher-7.1.6.dmg" className="version-btn" target="_blank" rel="noreferrer" style={{ fontSize: '13px', padding: '10px 12px', backgroundColor: '#3b3b3b' }}>
-              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="7 10 12 15 17 10"></polyline><line x1="12" y1="15" x2="12" y2="3"></line></svg>
-              Intel (x64)
-            </a>
-            <p className="version-req">macOS 10.15+</p>
+
+            <div style={{ display: 'flex', flexDirection: 'column', width: '100%', gap: '14px', alignItems: 'center' }}>
+              <div style={{ width: '100%', display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '4px' }}>
+                <a href="https://github.com/eshkereshek/pg_launcher/releases/latest/download/Pagrysha.Launcher-7.1.6-arm64.dmg" className="version-btn" target="_blank" rel="noreferrer" style={{ width: '100%', justifyContent: 'center' }}>
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="7 10 12 15 17 10"></polyline><line x1="12" y1="15" x2="12" y2="3"></line></svg>
+                  Скачать (ARM64)
+                </a>
+                <p className="version-req" style={{ margin: 0 }}>Apple Silicon (M1 / M2 / M3)</p>
+              </div>
+
+              <div style={{ width: '100%', display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '4px' }}>
+                <a href="https://github.com/eshkereshek/pg_launcher/releases/latest/download/Pagrysha.Launcher-7.1.6.dmg" className="version-btn" target="_blank" rel="noreferrer" style={{ width: '100%', justifyContent: 'center' }}>
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="7 10 12 15 17 10"></polyline><line x1="12" y1="15" x2="12" y2="3"></line></svg>
+                  Скачать (Intel)
+                </a>
+                <p className="version-req" style={{ margin: 0 }}>Процессоры Intel (x64)</p>
+              </div>
+            </div>
           </div>
 
           {/* Linux */}
