@@ -43,6 +43,7 @@ const SLIDES = [
 
 function App() {
   const [activeSlide, setActiveSlide] = useState(0);
+  const [menuOpen, setMenuOpen] = useState(false);
   const { isAuthenticated } = useAuth();
 
   return (
@@ -62,7 +63,26 @@ function App() {
             <Link to="/login" className="nav-btn">Войти</Link>
           )}
         </div>
+        <button
+          className={`nav-hamburger ${menuOpen ? 'open' : ''}`}
+          onClick={() => setMenuOpen(o => !o)}
+          aria-label="Меню"
+        >
+          <span /><span /><span />
+        </button>
       </nav>
+
+      {/* Mobile overlay */}
+      <div className={`nav-mobile-overlay ${menuOpen ? 'open' : ''}`} onClick={() => setMenuOpen(false)}>
+        <Link to="/download" onClick={() => setMenuOpen(false)}>Скачать</Link>
+        <Link to="/help" onClick={() => setMenuOpen(false)}>Help</Link>
+        <a href="https://github.com/eshkereshek/pg_launcher" target="_blank" rel="noreferrer" onClick={() => setMenuOpen(false)}>GitHub</a>
+        {isAuthenticated ? (
+          <Link to="/profile" className="nav-btn" onClick={() => setMenuOpen(false)}>Мой Аккаунт</Link>
+        ) : (
+          <Link to="/login" className="nav-btn" onClick={() => setMenuOpen(false)}>Войти</Link>
+        )}
+      </div>
 
       <section className="hero">
         <img src="/bg-minecraftnew.png" alt="background" className="hero-bg" />

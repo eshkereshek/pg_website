@@ -56,6 +56,77 @@ h1, h2, h3 {
   z-index: 1000;
 }
 
+/* Hamburger button */
+.nav-hamburger {
+  display: none;
+  flex-direction: column;
+  justify-content: center;
+  gap: 5px;
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 6px;
+  z-index: 1100;
+}
+
+.nav-hamburger span {
+  display: block;
+  width: 24px;
+  height: 2px;
+  background: #fff;
+  border-radius: 2px;
+  transition: all 0.25s ease;
+  transform-origin: center;
+}
+
+.nav-hamburger.open span:nth-child(1) {
+  transform: translateY(7px) rotate(45deg);
+}
+.nav-hamburger.open span:nth-child(2) {
+  opacity: 0;
+  transform: scaleX(0);
+}
+.nav-hamburger.open span:nth-child(3) {
+  transform: translateY(-7px) rotate(-45deg);
+}
+
+/* Mobile nav overlay */
+.nav-mobile-overlay {
+  display: none;
+  position: fixed;
+  top: 70px; left: 0; right: 0; bottom: 0;
+  background: rgba(17, 17, 17, 0.98);
+  z-index: 999;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 32px;
+  animation: fadeInDown 0.25s ease;
+}
+
+.nav-mobile-overlay.open {
+  display: flex;
+}
+
+.nav-mobile-overlay a,
+.nav-mobile-overlay .nav-btn {
+  font-size: 24px;
+  color: #fff;
+  text-decoration: none;
+  font-weight: 600;
+  letter-spacing: 1px;
+  transition: color 0.2s;
+}
+
+.nav-mobile-overlay a:hover {
+  color: var(--pg-yellow);
+}
+
+@keyframes fadeInDown {
+  from { opacity: 0; transform: translateY(-20px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
 .nav-brand {
   display: flex;
   align-items: center;
@@ -454,6 +525,103 @@ h1, h2, h3 {
   .bento-card.col-span-2 { grid-column: span 1; }
   .feature-row:nth-child(even) .feature-image::before { top: -15px; left: -15px; right: 15px; bottom: 15px; }
   .nav-links { display: none; }
+  .nav-hamburger { display: flex; }
+}
+
+@media (max-width: 768px) {
+  .navbar {
+    padding: 0 20px;
+  }
+
+  .hero {
+    padding: 120px 16px 80px;
+  }
+
+  .hero-title-top {
+    font-size: 28px;
+  }
+
+  .hero-title-bottom {
+    font-size: 34px;
+    gap: 8px;
+    flex-wrap: wrap;
+    justify-content: center;
+  }
+
+  .hero-pixel-heart {
+    font-size: 28px;
+  }
+
+  .hero p {
+    font-size: 16px;
+    margin-bottom: 28px;
+  }
+
+  .download-btn {
+    font-size: 16px;
+    padding: 12px 22px;
+    width: 100%;
+    max-width: 340px;
+    justify-content: center;
+  }
+
+  .hero-screenshot {
+    margin-top: 40px;
+    width: 100%;
+    transform: none;
+  }
+
+  .features {
+    padding: 60px 16px;
+  }
+
+  .features-title {
+    font-size: 30px;
+  }
+
+  .features-subtitle {
+    font-size: 15px;
+  }
+
+  .bento-card {
+    padding: 24px 18px;
+  }
+
+  .bento-card h3 {
+    font-size: 18px;
+  }
+
+  .cta {
+    padding: 60px 16px;
+  }
+
+  .cta h2 {
+    font-size: 30px;
+    margin-bottom: 28px;
+  }
+
+  .gallery-section {
+    padding: 60px 16px;
+  }
+
+  .gallery-showcase {
+    height: 260px;
+  }
+
+  .gallery-tabs {
+    grid-template-columns: 1fr;
+  }
+
+  .footer {
+    padding: 40px 16px 80px;
+  }
+
+  .footer button {
+    bottom: 16px !important;
+    right: 16px !important;
+    font-size: 16px !important;
+    padding: 8px 12px !important;
+  }
 }
 
 
@@ -817,6 +985,71 @@ h1, h2, h3 {
   }
   .versions-grid {
     grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 768px) {
+  .download-hero {
+    padding: 90px 16px 32px;
+  }
+
+  .download-hero-content {
+    flex-direction: column;
+    text-align: center;
+    gap: 30px;
+  }
+
+  .download-hero-text h1 {
+    font-size: 28px;
+  }
+
+  .download-hero-subtitle {
+    font-size: 15px;
+    margin-bottom: 24px;
+  }
+
+  .download-hero-image img {
+    max-width: 160px;
+  }
+
+  .download-btn-green {
+    font-size: 16px;
+    padding: 12px 20px;
+    width: 100%;
+    justify-content: center;
+  }
+
+  .download-hero-os {
+    margin-bottom: 24px;
+  }
+
+  .download-versions {
+    padding: 40px 16px 80px;
+  }
+
+  .download-versions h2 {
+    font-size: 24px;
+    margin-bottom: 24px;
+  }
+
+  .versions-grid {
+    grid-template-columns: 1fr;
+    gap: 16px;
+  }
+
+  .version-card {
+    padding: 28px 16px;
+  }
+
+  .version-btn {
+    width: 100%;
+    justify-content: center;
+    font-size: 13px;
+  }
+
+  .download-warning-banner {
+    font-size: 12px;
+    padding: 8px 12px;
   }
 }
 

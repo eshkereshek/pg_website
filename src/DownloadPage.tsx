@@ -1,7 +1,10 @@
+import { useState } from 'react';
 import { Link } from 'react-router-dom';
 import './index.css';
 
 function DownloadPage() {
+  const [menuOpen, setMenuOpen] = useState(false);
+
   return (
     <div className="download-page">
       <div className="download-warning-banner">
@@ -18,7 +21,19 @@ function DownloadPage() {
           <Link to="/help">Help</Link>
           <a href="https://github.com/eshkereshek/pg_launcher" target="_blank" rel="noreferrer">GitHub</a>
         </div>
+        <button
+          className={`nav-hamburger ${menuOpen ? 'open' : ''}`}
+          onClick={() => setMenuOpen(o => !o)}
+          aria-label="Меню"
+        >
+          <span /><span /><span />
+        </button>
       </nav>
+      <div className={`nav-mobile-overlay ${menuOpen ? 'open' : ''}`} onClick={() => setMenuOpen(false)}>
+        <Link to="/" onClick={() => setMenuOpen(false)}>На главную</Link>
+        <Link to="/help" onClick={() => setMenuOpen(false)}>Help</Link>
+        <a href="https://github.com/eshkereshek/pg_launcher" target="_blank" rel="noreferrer" onClick={() => setMenuOpen(false)}>GitHub</a>
+      </div>
 
       <div className="download-hero">
         <div className="download-hero-content">
