@@ -29,7 +29,7 @@ function DownloadPage() {
               Pagrysha Launcher просто лучше.
             </p>
             
-            <a href="https://github.com/eshkereshek/pg_launcher/releases/latest/download/Pagrysha.Launcher.7.1.6.exe" className="download-btn-green" target="_blank" rel="noreferrer">
+            <a href="https://github.com/eshkereshek/pg_launcher/releases/latest/download/Pagrysha.Launcher.7.1.8.exe" className="download-btn-green" target="_blank" rel="noreferrer">
               <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" style={{marginRight: '10px'}}><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="7 10 12 15 17 10"></polyline><line x1="12" y1="15" x2="12" y2="3"></line></svg>
               Скачать для Windows
             </a>
@@ -56,7 +56,7 @@ function DownloadPage() {
               <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M0 3.449L9.75 2.1v9.451H0m10.949-9.602L24 0v11.4H10.949M0 12.6h9.75v9.451L0 20.699M10.949 12.6H24V24l-13.051-1.801"/></svg>
               WINDOWS
             </div>
-            <a href="https://github.com/eshkereshek/pg_launcher/releases/latest/download/Pagrysha.Launcher.7.1.6.exe" className="version-btn" target="_blank" rel="noreferrer">
+            <a href="https://github.com/eshkereshek/pg_launcher/releases/latest/download/Pagrysha.Launcher.7.1.8.exe" className="version-btn" target="_blank" rel="noreferrer">
               <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="7 10 12 15 17 10"></polyline><line x1="12" y1="15" x2="12" y2="3"></line></svg>
               Скачать (.exe)
             </a>
@@ -72,7 +72,7 @@ function DownloadPage() {
 
             <div style={{ display: 'flex', flexDirection: 'column', width: '100%', gap: '14px', alignItems: 'center' }}>
               <div style={{ width: '100%', display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '4px' }}>
-                <a href="https://github.com/eshkereshek/pg_launcher/releases/latest/download/Pagrysha.Launcher-7.1.6-arm64.dmg" className="version-btn" target="_blank" rel="noreferrer" style={{ width: '100%', justifyContent: 'center' }}>
+                <a href="https://github.com/eshkereshek/pg_launcher/releases/latest/download/Pagrysha.Launcher-7.1.8-arm64.dmg" className="version-btn" target="_blank" rel="noreferrer" style={{ width: '100%', justifyContent: 'center' }}>
                   <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="7 10 12 15 17 10"></polyline><line x1="12" y1="15" x2="12" y2="3"></line></svg>
                   Скачать
                 </a>
@@ -80,7 +80,7 @@ function DownloadPage() {
               </div>
 
               <div style={{ width: '100%', display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '4px' }}>
-                <a href="https://github.com/eshkereshek/pg_launcher/releases/latest/download/Pagrysha.Launcher-7.1.6.dmg" className="version-btn" target="_blank" rel="noreferrer" style={{ width: '100%', justifyContent: 'center' }}>
+                <a href="https://github.com/eshkereshek/pg_launcher/releases/latest/download/Pagrysha.Launcher-7.1.8.dmg" className="version-btn" target="_blank" rel="noreferrer" style={{ width: '100%', justifyContent: 'center' }}>
                   <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="7 10 12 15 17 10"></polyline><line x1="12" y1="15" x2="12" y2="3"></line></svg>
                   Скачать
                 </a>
@@ -95,11 +95,11 @@ function DownloadPage() {
               <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M11.967 0c-.571 0-1.35.333-1.687.97-.611 1.155-.83 2.193-.578 3.315.228 1.01.815 1.944 1.577 2.825l-.261.272c-2.348-.163-4.887 1.346-6.195 3.335-1.127 1.714-1.574 3.655-1.275 5.753.298 2.097 1.258 4.093 2.81 5.485 1.439 1.29 3.29 1.933 5.12 1.996h1.054c1.83-.063 3.681-.706 5.12-1.996 1.552-1.392 2.512-3.388 2.81-5.485.299-2.098-.148-4.039-1.275-5.753-1.308-1.989-3.847-3.498-6.195-3.335l-.261-.272c.762-.881 1.349-1.815 1.577-2.825.252-1.122.033-2.16-.578-3.315C13.317.333 12.538 0 11.967 0zm-2.067 11.836c.928 0 1.685.762 1.685 1.696 0 .934-.757 1.696-1.685 1.696-.928 0-1.686-.762-1.686-1.696 0-.934.758-1.696 1.686-1.696zm4.186 0c.928 0 1.686.762 1.686 1.696 0 .934-.758 1.696-1.686 1.696-.928 0-1.685-.762-1.685-1.696 0-.934.757-1.696 1.685-1.696z"/></svg>
               LINUX
             </div>
-            <button className="version-btn disabled" disabled>
+            <a href="https://github.com/eshkereshek/pg_launcher/releases/latest/download/pagrysha-launcher_7.1.8_amd64.deb" className="version-btn" target="_blank" rel="noreferrer">
               <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="7 10 12 15 17 10"></polyline><line x1="12" y1="15" x2="12" y2="3"></line></svg>
-              Скачать
-            </button>
-            <p className="version-req">В разработке</p>
+              Скачать (.deb)
+            </a>
+            <p className="version-req">Ubuntu, Debian (x64)</p>
           </div>
         </div>
       </div>
