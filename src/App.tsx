@@ -85,7 +85,7 @@ function App() {
       </div>
 
       <section className="hero">
-        <img src="/bg-minecraftnew.png" alt="background" className="hero-bg" />
+        <img src="/bg-minecraft.png" alt="background" className="hero-bg" />
         <div className="hero-overlay"></div>
         
         <div className="hero-title-wrapper">
