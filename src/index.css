@@ -1336,7 +1336,7 @@ h1, h2, h3 {
 
 /* Profile Styles */
 .profile-page {
-  background-image: url('/profile-bg.png');
+  background-image: url('/bg-minecraft.png');
   background-size: cover;
   background-position: center;
   background-attachment: fixed;

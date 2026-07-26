@@ -7,10 +7,6 @@ function DownloadPage() {
 
   return (
     <div className="download-page">
-      <div className="download-warning-banner">
-        <strong>Внимание!</strong> Pagrysha Launcher находится в стадии активной разработки. Сообщайте нам о любых ошибках или недоработках.
-      </div>
-
       <nav className="navbar" style={{ position: 'relative', background: 'transparent', border: 'none' }}>
         <Link to="/" className="nav-brand">
           <img src="/newicon.png" alt="Pagrysha Launcher" />
@@ -56,7 +52,7 @@ function DownloadPage() {
           </div>
           
           <div className="download-hero-image">
-            <img src="/head.png" alt="Minecraft Head" />
+            <img src="/strider.gif" alt="Strider" />
           </div>
         </div>
       </div>

@@ -85,7 +85,7 @@ function App() {
       </div>
 
       <section className="hero">
-        <img src="/bg-minecraft.png" alt="background" className="hero-bg" />
+        <img src="/bg-minecraftnew.png" alt="background" className="hero-bg" />
         <div className="hero-overlay"></div>
         
         <div className="hero-title-wrapper">
@@ -199,13 +199,6 @@ function App() {
             </div>
           ))}
         </div>
-      </section>
-
-      <section id="download" className="cta">
-        <h2>Готов начать своё приключение?</h2>
-        <Link to="/download" className="download-btn">
-          Скачать для Windows
-        </Link>
       </section>
 
       <footer className="footer" style={{ position: 'relative' }}>
