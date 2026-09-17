@@ -374,11 +374,14 @@ export default function Help() {
       <footer className="footer" style={{ position: 'relative' }}>
         <button 
           onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })} 
-          className="download-btn" 
-          style={{ position: 'absolute', right: '30px', bottom: '30px', padding: '10px 15px', fontSize: '20px' }}
+          className="footer-back-top" 
           title="Наверх"
+          aria-label="Наверх"
         >
-          ↑
+          <svg fill="none" viewBox="0 0 24 24" width="24" height="24" style={{ display: 'block' }}>
+            <path stroke="#000" strokeOpacity="0.3" strokeWidth="2" d="M19 12.5h.5V8.833h-2.8V6.166h-2.8V3.5h-3.8v2.666H7.3v2.667H4.5V12.5h5.6v8h3.8v-8z" />
+            <path fill="#fff" d="M19 12V9.333h-2.8V6.666h-2.8V4h-2.8v2.666H7.8v2.667H5V12h5.6v8h2.8v-8z" />
+          </svg>
         </button>
         <p>© {new Date().getFullYear()} Pagrysha Launcher. Все права защищены.</p>
         <p style={{ marginTop: '8px' }}>

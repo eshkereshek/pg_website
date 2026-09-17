@@ -10,6 +10,20 @@ const DEFAULT_DOWNLOADS = {
   linuxDeb: 'https://github.com/eshkereshek/pg_launcher/releases/latest/download/pagrysha-launcher_7.1.9_amd64.deb',
 };
 
+const PixelDownloadIcon = ({ size = 18, color = "#000000" }: { size?: number, color?: string }) => (
+  <svg 
+    width={size} 
+    height={size} 
+    viewBox="0 0 24 24" 
+    fill="none" 
+    style={{ display: 'inline-block', verticalAlign: 'middle', flexShrink: 0 }}
+  >
+    <path fill={color} d="M13.09 4h-2.18v7.273H8.726v2.182h2.182v2.181h2.182v-2.181h2.182v-2.182H13.09zM17.455 9.09h-2.182v2.183h2.182z" />
+    <path fill={color} d="M8.727 9.09H6.545v2.183h2.182zM6.182 17.818h11.636v-2.182H20V20H4v-4.364h2.182z" />
+    <path stroke="#000000" strokeOpacity={0.3} d="M13.59 4v-.5h-3.18v7.273H9.226V8.59H6.045v3.182h2.182v2.181h2.182v2.182h3.182v-2.181h2.182v-2.182h2.181V8.59h-3.181v2.182H13.59zm4.228 11.136h-.5v2.182H6.682v-2.182H3.5V20.5h17v-5.364h-2.682Z" />
+  </svg>
+);
+
 function DownloadPage() {
   const [menuOpen, setMenuOpen] = useState(false);
   const [downloads, setDownloads] = useState(DEFAULT_DOWNLOADS);
@@ -63,6 +77,7 @@ function DownloadPage() {
       </div>
 
       <div className="download-hero">
+        <div className="download-hero-overlay"></div>
         <div className="download-hero-content">
           <div className="download-hero-text">
             <h1>Скачать Pagrysha Launcher</h1>
@@ -72,7 +87,6 @@ function DownloadPage() {
             </p>
             
             <a href={downloads.win} className="download-btn-green" target="_blank" rel="noreferrer">
-              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" style={{marginRight: '10px'}}><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="7 10 12 15 17 10"></polyline><line x1="12" y1="15" x2="12" y2="3"></line></svg>
               Скачать для Windows
             </a>
             <p className="download-hero-os">Windows 7, 8, 10, 11 • v{downloads.version}</p>
@@ -99,7 +113,7 @@ function DownloadPage() {
               WINDOWS
             </div>
             <a href={downloads.win} className="version-btn" target="_blank" rel="noreferrer">
-              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="7 10 12 15 17 10"></polyline><line x1="12" y1="15" x2="12" y2="3"></line></svg>
+              <PixelDownloadIcon size={18} color="#000000" />
               Скачать (.exe)
             </a>
             <p className="version-req">Windows 7, 8, 10, 11</p>
@@ -115,7 +129,7 @@ function DownloadPage() {
             <div style={{ display: 'flex', flexDirection: 'column', width: '100%', gap: '14px', alignItems: 'center' }}>
               <div style={{ width: '100%', display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '4px' }}>
                 <a href={downloads.macArm} className="version-btn" target="_blank" rel="noreferrer" style={{ width: '100%', justifyContent: 'center' }}>
-                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="7 10 12 15 17 10"></polyline><line x1="12" y1="15" x2="12" y2="3"></line></svg>
+                  <PixelDownloadIcon size={18} color="#000000" />
                   Скачать
                 </a>
                 <p className="version-req" style={{ margin: 0 }}>Apple Silicon (M1 / M2 / M3)</p>
@@ -123,7 +137,7 @@ function DownloadPage() {
 
               <div style={{ width: '100%', display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '4px' }}>
                 <a href={downloads.macIntel} className="version-btn" target="_blank" rel="noreferrer" style={{ width: '100%', justifyContent: 'center' }}>
-                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="7 10 12 15 17 10"></polyline><line x1="12" y1="15" x2="12" y2="3"></line></svg>
+                  <PixelDownloadIcon size={18} color="#000000" />
                   Скачать
                 </a>
                 <p className="version-req" style={{ margin: 0 }}>Процессоры Intel (x64)</p>
@@ -138,7 +152,7 @@ function DownloadPage() {
               LINUX
             </div>
             <a href={downloads.linuxDeb} className="version-btn" target="_blank" rel="noreferrer">
-              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="7 10 12 15 17 10"></polyline><line x1="12" y1="15" x2="12" y2="3"></line></svg>
+              <PixelDownloadIcon size={18} color="#000000" />
               Скачать (.deb)
             </a>
             <p className="version-req">Ubuntu, Debian (x64)</p>
@@ -149,11 +163,14 @@ function DownloadPage() {
       <footer className="footer" style={{ position: 'relative', background: 'var(--pg-black)', color: '#999', borderTop: '1px solid var(--pg-dark3)' }}>
         <button 
           onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })} 
-          className="download-btn-green" 
-          style={{ position: 'absolute', right: '30px', bottom: '30px', padding: '10px 15px', fontSize: '20px' }}
+          className="footer-back-top" 
           title="Наверх"
+          aria-label="Наверх"
         >
-          ↑
+          <svg fill="none" viewBox="0 0 24 24" width="24" height="24" style={{ display: 'block' }}>
+            <path stroke="#000" strokeOpacity="0.3" strokeWidth="2" d="M19 12.5h.5V8.833h-2.8V6.166h-2.8V3.5h-3.8v2.666H7.3v2.667H4.5V12.5h5.6v8h3.8v-8z" />
+            <path fill="#fff" d="M19 12V9.333h-2.8V6.666h-2.8V4h-2.8v2.666H7.8v2.667H5V12h5.6v8h2.8v-8z" />
+          </svg>
         </button>
         <p>© {new Date().getFullYear()} Pagrysha Launcher. Все права защищены.</p>
         <p style={{ marginTop: '8px' }}>

@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useState, useEffect, useRef } from 'react'
 import { Link } from 'react-router-dom'
 import { useAuth } from './contexts/AuthContext'
 import './index.css'
@@ -45,6 +45,90 @@ function App() {
   const [activeSlide, setActiveSlide] = useState(0);
   const [menuOpen, setMenuOpen] = useState(false);
   const { isAuthenticated } = useAuth();
+  const titleWrapperRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    const wrapper = titleWrapperRef.current;
+    if (!wrapper) return;
+
+    const chars = Array.from(wrapper.querySelectorAll<HTMLElement>('.hero-char'));
+    if (chars.length === 0) return;
+
+    const RADIUS = 120;
+    const MAX_PUSH_X = 30;
+    const MAX_PUSH_Y = 18;
+    const MAX_ROTATE = 10;
+
+    let cachedRects: { x: number; y: number }[] = [];
+    let rafId: number | null = null;
+
+    const measure = () => {
+      cachedRects = chars.map(c => {
+        const prev = c.style.transform;
+        c.style.transform = '';
+        const r = c.getBoundingClientRect();
+        c.style.transform = prev;
+        return { x: r.left + r.width / 2, y: r.top + r.height / 2 };
+      });
+    };
+
+    // Initial measure after entrance animation settles
+    const timer = setTimeout(measure, 900);
+
+    const handleMouseMove = (e: MouseEvent) => {
+      if (cachedRects.length === 0) measure();
+
+      if (rafId) cancelAnimationFrame(rafId);
+      rafId = requestAnimationFrame(() => {
+        const mouseX = e.clientX;
+        const mouseY = e.clientY;
+
+        chars.forEach((char, idx) => {
+          const origin = cachedRects[idx];
+          if (!origin) return;
+
+          const dx = origin.x - mouseX;
+          const dy = origin.y - mouseY;
+          const dist = Math.hypot(dx, dy);
+
+          if (dist < RADIUS && dist > 0) {
+            const power = Math.pow(1 - dist / RADIUS, 1.25);
+            const pushX = (dx / dist) * power * MAX_PUSH_X;
+            const pushY = (dy / dist) * power * MAX_PUSH_Y;
+            const rot = (dx / dist) * power * MAX_ROTATE;
+
+            char.style.transform = `translate3d(${pushX.toFixed(1)}px, ${pushY.toFixed(1)}px, 0) rotate(${rot.toFixed(1)}deg) scale(1.05)`;
+            char.style.transition = 'transform 0.06s ease-out';
+          } else {
+            if (char.style.transform && char.style.transform !== 'translate3d(0px, 0px, 0px) rotate(0deg) scale(1)') {
+              char.style.transform = 'translate3d(0px, 0px, 0px) rotate(0deg) scale(1)';
+              char.style.transition = 'transform 0.35s cubic-bezier(0.34, 1.56, 0.64, 1)';
+            }
+          }
+        });
+      });
+    };
+
+    const handleMouseLeave = () => {
+      if (rafId) cancelAnimationFrame(rafId);
+      chars.forEach(char => {
+        char.style.transform = 'translate3d(0px, 0px, 0px) rotate(0deg) scale(1)';
+        char.style.transition = 'transform 0.45s cubic-bezier(0.34, 1.56, 0.64, 1)';
+      });
+    };
+
+    wrapper.addEventListener('mousemove', handleMouseMove);
+    wrapper.addEventListener('mouseleave', handleMouseLeave);
+    window.addEventListener('resize', measure);
+
+    return () => {
+      clearTimeout(timer);
+      if (rafId) cancelAnimationFrame(rafId);
+      wrapper.removeEventListener('mousemove', handleMouseMove);
+      wrapper.removeEventListener('mouseleave', handleMouseLeave);
+      window.removeEventListener('resize', measure);
+    };
+  }, []);
 
   return (
     <>
@@ -88,12 +172,43 @@ function App() {
         <img src="/bg-minecraftnew.png" alt="background" className="hero-bg" />
         <div className="hero-overlay"></div>
         
-        <div className="hero-title-wrapper">
-          <h1 className="hero-main-title">
-            <span className="hero-title-top">ТВОЙ НОВЫЙ ЛЮБИМЫЙ</span>
-            <span className="hero-title-bottom">
-              <span className="hero-highlight">MINECRAFT</span> ЛАУНЧЕР
-            </span>
+        <div className="hero-title-wrapper" ref={titleWrapperRef}>
+          <h1 className="hero-main-title" aria-label="Удобный Minecraft лаунчер">
+            <div className="hero-title-row hero-title-top">
+              {'УДОБНЫЙ'.split('').map((char, i) => (
+                <span
+                  key={`top-${i}`}
+                  className="hero-char-slot"
+                  style={{ animationDelay: `${i * 35}ms` }}
+                >
+                  <span className="hero-char">{char}</span>
+                </span>
+              ))}
+            </div>
+            <div className="hero-title-row hero-title-bottom">
+              <div className="hero-word hero-word-yellow">
+                {'MINECRAFT'.split('').map((char, i) => (
+                  <span
+                    key={`mc-${i}`}
+                    className="hero-char-slot"
+                    style={{ animationDelay: `${260 + i * 35}ms` }}
+                  >
+                    <span className="hero-char char-yellow">{char}</span>
+                  </span>
+                ))}
+              </div>
+              <div className="hero-word">
+                {'ЛАУНЧЕР'.split('').map((char, i) => (
+                  <span
+                    key={`bot-${i}`}
+                    className="hero-char-slot"
+                    style={{ animationDelay: `${580 + i * 35}ms` }}
+                  >
+                    <span className="hero-char">{char}</span>
+                  </span>
+                ))}
+              </div>
+            </div>
           </h1>
         </div>
         <p>Устанавливай все версии игры, популярные сборки модов и заходи с аккаунтом Ely.by в один клик. Погнали играть с друзьями!</p>
@@ -204,11 +319,14 @@ function App() {
       <footer className="footer" style={{ position: 'relative' }}>
         <button 
           onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })} 
-          className="download-btn" 
-          style={{ position: 'absolute', right: '30px', bottom: '30px', padding: '10px 15px', fontSize: '20px' }}
+          className="footer-back-top" 
           title="Наверх"
+          aria-label="Наверх"
         >
-          ↑
+          <svg fill="none" viewBox="0 0 24 24" width="24" height="24" style={{ display: 'block' }}>
+            <path stroke="#000" strokeOpacity="0.3" strokeWidth="2" d="M19 12.5h.5V8.833h-2.8V6.166h-2.8V3.5h-3.8v2.666H7.3v2.667H4.5V12.5h5.6v8h3.8v-8z" />
+            <path fill="#fff" d="M19 12V9.333h-2.8V6.666h-2.8V4h-2.8v2.666H7.8v2.667H5V12h5.6v8h2.8v-8z" />
+          </svg>
         </button>
         <p>© {new Date().getFullYear()} Pagrysha Launcher. Все права защищены.</p>
         <p style={{ marginTop: '8px' }}>

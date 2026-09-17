@@ -10,8 +10,8 @@ import '../index.css';
 export default function Profile() {
   const { user, token, logout, updateUser, isLoading } = useAuth();
   const navigate = useNavigate();
-  const viewerRef = useRef<HTMLDivElement>(null);
-  const [skinViewer, setSkinViewer] = useState<SkinViewer | null>(null);
+  const viewerContainerRef = useRef<HTMLDivElement>(null);
+  const viewerInstanceRef = useRef<SkinViewer | null>(null);
   const [activeTab, setActiveTab] = useState<'wardrobe' | 'catalog' | 'capes'>('wardrobe');
   
   const [uploadingSkin, setUploadingSkin] = useState(false);
@@ -23,41 +23,59 @@ export default function Profile() {
     }
   }, [user, isLoading, navigate]);
 
+  // Mount/unmount SkinViewer for wardrobe tab
   useEffect(() => {
-    if (viewerRef.current && !skinViewer && user && activeTab === 'wardrobe') {
-      const viewer = new SkinViewer({
-        canvas: document.createElement('canvas'),
-        width: 300,
-        height: 400,
-        skin: user.skinUrl || 'https://minotar.net/skin/Steve.png',
-        cape: user.capeUrl || undefined
-      });
-      viewer.animation = new WalkingAnimation();
-      viewerRef.current.appendChild(viewer.canvas);
-      setSkinViewer(viewer);
+    const container = viewerContainerRef.current;
+    if (!container || !user || activeTab !== 'wardrobe') {
+      if (viewerInstanceRef.current) {
+        viewerInstanceRef.current.dispose();
+        viewerInstanceRef.current = null;
+      }
+      if (container) {
+        container.innerHTML = '';
+      }
+      return;
     }
-    
+
+    // Always clear container to guarantee never rendering duplicate canvases
+    container.innerHTML = '';
+    if (viewerInstanceRef.current) {
+      viewerInstanceRef.current.dispose();
+      viewerInstanceRef.current = null;
+    }
+
+    const viewer = new SkinViewer({
+      width: 300,
+      height: 400,
+      skin: user.skinUrl || 'https://minotar.net/skin/Steve.png',
+      cape: user.capeUrl || undefined
+    });
+    viewer.animation = new WalkingAnimation();
+    container.appendChild(viewer.canvas);
+    viewerInstanceRef.current = viewer;
+
     return () => {
-      if (skinViewer && activeTab !== 'wardrobe') {
-        skinViewer.dispose();
-        if (viewerRef.current && viewerRef.current.contains(skinViewer.canvas)) {
-           viewerRef.current.removeChild(skinViewer.canvas);
-        }
-        setSkinViewer(null);
+      viewer.dispose();
+      if (viewerInstanceRef.current === viewer) {
+        viewerInstanceRef.current = null;
+      }
+      if (container.contains(viewer.canvas)) {
+        container.removeChild(viewer.canvas);
       }
     };
-  }, [viewerRef, user, skinViewer, activeTab]);
+  }, [activeTab, user?.username]);
 
+  // Dynamically update skin and cape when user profile changes
   useEffect(() => {
-    if (skinViewer && user && activeTab === 'wardrobe') {
-      skinViewer.loadSkin(user.skinUrl || 'https://minotar.net/skin/Steve.png');
+    if (viewerInstanceRef.current && activeTab === 'wardrobe' && user) {
+      viewerInstanceRef.current.loadSkin(user.skinUrl || 'https://minotar.net/skin/Steve.png');
       if (user.capeUrl) {
-        skinViewer.loadCape(user.capeUrl);
+        viewerInstanceRef.current.loadCape(user.capeUrl);
       } else {
-        skinViewer.resetCape();
+        viewerInstanceRef.current.resetCape();
       }
     }
-  }, [user, skinViewer, activeTab]);
+  }, [user?.skinUrl, user?.capeUrl, activeTab]);
 
   const handleFileUpload = async (e: React.ChangeEvent<HTMLInputElement>, type: 'skin' | 'cape') => {
     const file = e.target.files?.[0];
@@ -152,7 +170,7 @@ export default function Profile() {
         </div>
 
         <div className="profile-grid" style={{ display: activeTab === 'wardrobe' ? 'grid' : 'none' }}>
-          <div className="profile-viewer" ref={viewerRef}>
+          <div className="profile-viewer" ref={viewerContainerRef}>
             {/* Skinview3D goes here */}
           </div>
           
@@ -192,11 +210,11 @@ export default function Profile() {
         </div>
         
         <div style={{ display: activeTab === 'catalog' ? 'block' : 'none' }}>
-          <SkinBrowser onSkinUpdated={() => {}} />
+          <SkinBrowser onSkinUpdated={() => setActiveTab('wardrobe')} />
         </div>
 
         <div style={{ display: activeTab === 'capes' ? 'block' : 'none' }}>
-          <CapeBrowser onSkinUpdated={() => {}} />
+          <CapeBrowser onSkinUpdated={() => setActiveTab('wardrobe')} />
         </div>
       </div>
     </div>
