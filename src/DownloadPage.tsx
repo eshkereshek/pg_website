@@ -1,128 +1,189 @@
-import { useEffect, useState } from 'react';
+import { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
-import SiteLayout from './components/SiteLayout';
 import './index.css';
 
-const REPO = 'eshkereshek/pg_launcher';
-const RELEASES_PAGE = `https://github.com/${REPO}/releases/latest`;
+const RELEASES = 'https://github.com/eshkereshek/pg_launcher/releases/latest';
+const DEFAULT_DOWNLOADS = {
+  version: '',
+  win: RELEASES,
+  macArm: RELEASES,
+  macIntel: RELEASES,
+  linuxDeb: RELEASES,
+};
 
-interface Asset {
-  name: string;
-  browser_download_url: string;
-}
+const PixelDownloadIcon = ({ size = 18, color = "#000000" }: { size?: number, color?: string }) => (
+  <svg 
+    width={size} 
+    height={size} 
+    viewBox="0 0 24 24" 
+    fill="none" 
+    style={{ display: 'inline-block', verticalAlign: 'middle', flexShrink: 0 }}
+  >
+    <path fill={color} d="M13.09 4h-2.18v7.273H8.726v2.182h2.182v2.181h2.182v-2.181h2.182v-2.182H13.09zM17.455 9.09h-2.182v2.183h2.182z" />
+    <path fill={color} d="M8.727 9.09H6.545v2.183h2.182zM6.182 17.818h11.636v-2.182H20V20H4v-4.364h2.182z" />
+    <path stroke="#000000" strokeOpacity={0.3} d="M13.59 4v-.5h-3.18v7.273H9.226V8.59H6.045v3.182h2.182v2.181h2.182v2.182h3.182v-2.181h2.182v-2.182h2.181V8.59h-3.181v2.182H13.59zm4.228 11.136h-.5v2.182H6.682v-2.182H3.5V20.5h17v-5.364h-2.682Z" />
+  </svg>
+);
 
-interface Release {
-  version: string;
-  publishedAt: string;
-  windows?: string;
-  macIntel?: string;
-  macArm?: string;
-  linuxDeb?: string;
-}
-
-/** Ищем ассеты по суффиксам, которые выдаёт сборка релиза. */
-function pickAssets(assets: Asset[]) {
-  const find = (test: (n: string) => boolean) =>
-    assets.find((a) => test(a.name))?.browser_download_url;
-  return {
-    windows: find((n) => n.endsWith('x64-setup.exe')),
-    macIntel: find((n) => n.endsWith('x64.dmg')),
-    macArm: find((n) => n.endsWith('aarch64.dmg')),
-    linuxDeb: find((n) => n.endsWith('amd64.deb')),
-  };
-}
-
-export default function DownloadPage() {
-  const [release, setRelease] = useState<Release | null>(null);
-  const [failed, setFailed] = useState(false);
+function DownloadPage() {
+  const [menuOpen, setMenuOpen] = useState(false);
+  const [downloads, setDownloads] = useState(DEFAULT_DOWNLOADS);
 
   useEffect(() => {
-    const ctrl = new AbortController();
-    fetch(`https://api.github.com/repos/${REPO}/releases/latest`, {
-      signal: ctrl.signal,
-      headers: { Accept: 'application/vnd.github+json' },
-    })
-      .then((res) => {
-        if (!res.ok) throw new Error(String(res.status));
-        return res.json();
+    fetch('https://api.github.com/repos/eshkereshek/pg_launcher/releases/latest')
+      .then(res => res.json())
+      .then(data => {
+        if (!data || !Array.isArray(data.assets)) return;
+        const ver = data.tag_name ? data.tag_name.replace(/^v/, '') : data.name || '';
+        const win = data.assets.find((a: any) => a.name.endsWith('x64-setup.exe'))?.browser_download_url;
+        const macArm = data.assets.find((a: any) => a.name.endsWith('aarch64.dmg'))?.browser_download_url;
+        const macIntel = data.assets.find((a: any) => a.name.endsWith('x64.dmg'))?.browser_download_url;
+        const linuxDeb = data.assets.find((a: any) => a.name.endsWith('amd64.deb'))?.browser_download_url;
+
+        setDownloads(prev => ({
+          version: ver || prev.version,
+          win: win || prev.win,
+          macArm: macArm || prev.macArm,
+          macIntel: macIntel || prev.macIntel,
+          linuxDeb: linuxDeb || prev.linuxDeb,
+        }));
       })
-      .then((data) => {
-        if (!data || !Array.isArray(data.assets)) throw new Error('no assets');
-        setRelease({
-          version: String(data.tag_name || '').replace(/^v/, ''),
-          publishedAt: data.published_at,
-          ...pickAssets(data.assets),
-        });
-      })
-      .catch((err) => {
-        if (err.name !== 'AbortError') setFailed(true);
-      });
-    return () => ctrl.abort();
+      .catch(() => {});
   }, []);
 
-  const link = (url?: string) => url || RELEASES_PAGE;
-
   return (
-    <SiteLayout>
-      <section className="dl-hero">
-        <p className="dl-eyebrow">Pagrysha Launcher</p>
-        <h1 className="dl-title">Скачать лаунчер</h1>
-        <p className="dl-sub">
-          Установка всех версий Minecraft, модов и сборок в один клик.
+    <div className="download-page">
+      <nav className="navbar" style={{ position: 'relative', background: 'transparent', border: 'none' }}>
+        <Link to="/" className="nav-brand">
+          <img src="/newicon.png" alt="Pagrysha Launcher" />
+          <span>Pagrysha Launcher</span>
+        </Link>
+        <div className="nav-links">
+          <Link to="/">На главную</Link>
+          <Link to="/help">Help</Link>
+          <a href="https://github.com/eshkereshek/pg_launcher" target="_blank" rel="noreferrer">GitHub</a>
+        </div>
+        <button
+          className={`nav-hamburger ${menuOpen ? 'open' : ''}`}
+          onClick={() => setMenuOpen(o => !o)}
+          aria-label="Меню"
+        >
+          <span /><span /><span />
+        </button>
+      </nav>
+      <div className={`nav-mobile-overlay ${menuOpen ? 'open' : ''}`} onClick={() => setMenuOpen(false)}>
+        <Link to="/" onClick={() => setMenuOpen(false)}>На главную</Link>
+        <Link to="/help" onClick={() => setMenuOpen(false)}>Help</Link>
+        <a href="https://github.com/eshkereshek/pg_launcher" target="_blank" rel="noreferrer" onClick={() => setMenuOpen(false)}>GitHub</a>
+      </div>
+
+      <div className="download-hero">
+        <div className="download-hero-overlay"></div>
+        <div className="download-hero-content">
+          <div className="download-hero-text">
+            <h1>Скачать Pagrysha Launcher</h1>
+            <p className="download-hero-subtitle">
+              Удобный и простой.<br />
+              Pagrysha Launcher просто лучше.
+            </p>
+            
+            <a href={downloads.win} className="download-btn-green" target="_blank" rel="noreferrer">
+              Скачать для Windows
+            </a>
+            <p className="download-hero-os">Windows 7, 8, 10, 11 • v{downloads.version}</p>
+
+            <p className="download-hero-disclaimer">
+              При скачивании и использовании Pagrysha Launcher, вы соглашаетесь с <Link to="/terms">пользовательским соглашением</Link> и <Link to="/privacy">политикой конфиденциальности</Link>.
+            </p>
+          </div>
+          
+          <div className="download-hero-image">
+            <img src="/strider.gif" alt="Strider" />
+          </div>
+        </div>
+      </div>
+
+      <div className="download-versions">
+        <h2>Все версии</h2>
+        
+        <div className="versions-grid">
+          {/* Windows */}
+          <div className="version-card">
+            <div className="version-os">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M0 3.449L9.75 2.1v9.451H0m10.949-9.602L24 0v11.4H10.949M0 12.6h9.75v9.451L0 20.699M10.949 12.6H24V24l-13.051-1.801"/></svg>
+              WINDOWS
+            </div>
+            <a href={downloads.win} className="version-btn" target="_blank" rel="noreferrer">
+              <PixelDownloadIcon size={18} color="#000000" />
+              Скачать (.exe)
+            </a>
+            <p className="version-req">Windows 7, 8, 10, 11</p>
+          </div>
+
+          {/* MacOS */}
+          <div className="version-card">
+            <div className="version-os">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M17.05 20.28c-.98.95-2.05.8-3.08.35-1.09-.46-2.09-.48-3.24 0-1.44.62-2.2.44-3.06-.35C2.79 15.25 3.51 7.59 9.05 7.31c1.35.07 2.29.74 3.08.8 1.18-.19 2.31-.88 3.5-.8 1.48.06 2.62.62 3.32 1.6-2.88 1.76-2.39 5.56.57 6.78-.65 1.71-1.48 3.45-2.47 4.59zM12.03 7.25c-.15-2.23 1.66-4.07 3.74-4.25.32 2.39-1.92 4.28-3.74 4.25z"/></svg>
+              MACOS
+            </div>
+
+            <div style={{ display: 'flex', flexDirection: 'column', width: '100%', gap: '14px', alignItems: 'center' }}>
+              <div style={{ width: '100%', display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '4px' }}>
+                <a href={downloads.macArm} className="version-btn" target="_blank" rel="noreferrer" style={{ width: '100%', justifyContent: 'center' }}>
+                  <PixelDownloadIcon size={18} color="#000000" />
+                  Скачать
+                </a>
+                <p className="version-req" style={{ margin: 0 }}>Apple Silicon (M1 / M2 / M3)</p>
+              </div>
+
+              <div style={{ width: '100%', display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '4px' }}>
+                <a href={downloads.macIntel} className="version-btn" target="_blank" rel="noreferrer" style={{ width: '100%', justifyContent: 'center' }}>
+                  <PixelDownloadIcon size={18} color="#000000" />
+                  Скачать
+                </a>
+                <p className="version-req" style={{ margin: 0 }}>Процессоры Intel (x64)</p>
+              </div>
+            </div>
+          </div>
+
+          {/* Linux */}
+          <div className="version-card">
+            <div className="version-os">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M11.967 0c-.571 0-1.35.333-1.687.97-.611 1.155-.83 2.193-.578 3.315.228 1.01.815 1.944 1.577 2.825l-.261.272c-2.348-.163-4.887 1.346-6.195 3.335-1.127 1.714-1.574 3.655-1.275 5.753.298 2.097 1.258 4.093 2.81 5.485 1.439 1.29 3.29 1.933 5.12 1.996h1.054c1.83-.063 3.681-.706 5.12-1.996 1.552-1.392 2.512-3.388 2.81-5.485.299-2.098-.148-4.039-1.275-5.753-1.308-1.989-3.847-3.498-6.195-3.335l-.261-.272c.762-.881 1.349-1.815 1.577-2.825.252-1.122.033-2.16-.578-3.315C13.317.333 12.538 0 11.967 0zm-2.067 11.836c.928 0 1.685.762 1.685 1.696 0 .934-.757 1.696-1.685 1.696-.928 0-1.686-.762-1.686-1.696 0-.934.758-1.696 1.686-1.696zm4.186 0c.928 0 1.686.762 1.686 1.696 0 .934-.758 1.696-1.686 1.696-.928 0-1.685-.762-1.685-1.696 0-.934.757-1.696 1.685-1.696z"/></svg>
+              LINUX
+            </div>
+            <a href={downloads.linuxDeb} className="version-btn" target="_blank" rel="noreferrer">
+              <PixelDownloadIcon size={18} color="#000000" />
+              Скачать (.deb)
+            </a>
+            <p className="version-req">Ubuntu, Debian (x64)</p>
+          </div>
+        </div>
+      </div>
+
+      <footer className="footer" style={{ position: 'relative', background: 'var(--pg-black)', color: '#999', borderTop: '1px solid var(--pg-dark3)' }}>
+        <button 
+          onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })} 
+          className="footer-back-top" 
+          title="Наверх"
+          aria-label="Наверх"
+        >
+          <svg fill="none" viewBox="0 0 24 24" width="24" height="24" style={{ display: 'block' }}>
+            <path stroke="#000" strokeOpacity="0.3" strokeWidth="2" d="M19 12.5h.5V8.833h-2.8V6.166h-2.8V3.5h-3.8v2.666H7.3v2.667H4.5V12.5h5.6v8h3.8v-8z" />
+            <path fill="#fff" d="M19 12V9.333h-2.8V6.666h-2.8V4h-2.8v2.666H7.8v2.667H5V12h5.6v8h2.8v-8z" />
+          </svg>
+        </button>
+        <p>© {new Date().getFullYear()} Pagrysha Launcher. Все права защищены.</p>
+        <p style={{ marginTop: '8px' }}>
+          Электронная почта: <a href="mailto:pagrysha.launcher@gmail.com" style={{ color: 'var(--pg-yellow)', fontWeight: '500' }}>pagrysha.launcher@gmail.com</a>
         </p>
-        {release && (
-          <p className="dl-version">
-            Версия {release.version}
-            {release.publishedAt && ` · ${new Date(release.publishedAt).toLocaleDateString('ru-RU')}`}
-          </p>
-        )}
-        {failed && (
-          <p className="dl-notice">
-            Не удалось получить список релизов. Откройте{' '}
-            <a href={RELEASES_PAGE} target="_blank" rel="noreferrer">страницу релизов</a>.
-          </p>
-        )}
-      </section>
-
-      <section className="dl-grid">
-        <article className="dl-card">
-          <h2>Windows</h2>
-          <p>Windows 10 и 11, установщик .exe</p>
-          <a className="dl-btn" href={link(release?.windows)} target="_blank" rel="noreferrer">
-            Скачать .exe
-          </a>
-        </article>
-
-        <article className="dl-card">
-          <h2>macOS · Apple Silicon</h2>
-          <p>M1, M2, M3 и новее</p>
-          <a className="dl-btn" href={link(release?.macArm)} target="_blank" rel="noreferrer">
-            Скачать .dmg
-          </a>
-        </article>
-
-        <article className="dl-card">
-          <h2>macOS · Intel</h2>
-          <p>Компьютеры на процессорах Intel</p>
-          <a className="dl-btn" href={link(release?.macIntel)} target="_blank" rel="noreferrer">
-            Скачать .dmg
-          </a>
-        </article>
-
-        <article className="dl-card">
-          <h2>Linux</h2>
-          <p>Debian и Ubuntu, пакет .deb</p>
-          <a className="dl-btn" href={link(release?.linuxDeb)} target="_blank" rel="noreferrer">
-            Скачать .deb
-          </a>
-        </article>
-      </section>
-
-      <p className="dl-legal">
-        Скачивая и используя лаунчер, вы соглашаетесь с{' '}
-        <Link to="/terms">пользовательским соглашением</Link> и{' '}
-        <Link to="/privacy">политикой конфиденциальности</Link>.
-      </p>
-    </SiteLayout>
+        <p style={{ marginTop: '8px' }}>
+          <Link to="/terms" style={{color: '#aaa'}}>Соглашение</Link> | <Link to="/privacy" style={{color: '#aaa'}}>Конфиденциальность</Link> | <a href="https://github.com/eshkereshek/pg_launcher" target="_blank" rel="noreferrer" style={{color: '#666'}}>Open Source на GitHub</a>
+        </p>
+        <p style={{marginTop: '15px', fontSize: '10px', color: '#888', textTransform: 'uppercase', letterSpacing: '1px'}}>НЕ ОФИЦИАЛЬНЫЙ ПРОДУКТ MINECRAFT. НЕ ОДОБРЕН MOJANG И НЕ СВЯЗАН С НИМИ.</p>
+      </footer>
+    </div>
   );
 }
+
+export default DownloadPage;
