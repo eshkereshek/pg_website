@@ -37,7 +37,6 @@ export default function Login() {
         </Link>
         <div className="nav-links">
           <Link to="/download">Скачать</Link>
-          <Link to="/register" className="nav-btn">Регистрация</Link>
         </div>
       </nav>
 
@@ -76,7 +75,7 @@ export default function Login() {
           </form>
           
           <div className="auth-footer">
-            Нет аккаунта? <Link to="/register">Зарегистрироваться</Link>
+            
           </div>
         </div>
         </div>
