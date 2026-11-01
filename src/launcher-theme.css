@@ -432,9 +432,10 @@ h1, h2, h3 {
   filter: drop-shadow(0 8px 14px rgba(0, 0, 0, 0.45));
 }
 
+/* Картинка на странице загрузки без рамки: только мягкая тень. */
 .download-hero-image img {
-  border: 2px solid #0b0b0b;
-  clip-path: var(--mc-step-clip);
+  border: none;
+  clip-path: none;
 }
 
 /* --- Вход и профиль ------------------------------------------------------ */
