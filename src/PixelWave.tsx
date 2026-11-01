@@ -2,18 +2,22 @@ import { useCallback, useEffect, useRef, useState, type CSSProperties } from 're
 import { useNavigate } from 'react-router-dom'
 import './pixel-wave.css'
 
-/* Переход «пиксельной волной» только на эти страницы. */
-const ROUTES = ['/download', '/help']
+/* Переход «пиксельной волной» на эти страницы. */
+const ROUTES = ['/', '/download', '/help']
 
 const COLS = 26
 const ROWS = 15
 const STEP_MS = 9
-const IN_MS = 260
-const OUT_MS = 220
+const IN_MS = 220
 
-type Phase = 'idle' | 'cover' | 'reveal'
+/* Пауза после смены маршрута: новая страница успевает отрисоваться,
+   прежде чем квадраты начнут открываться. */
+const SETTLE_MS = 90
+const FADE_MS = 200
 
-/* Волна идёт по диагонали: правые и нижние блоки появляются позже. */
+type Phase = 'idle' | 'cover' | 'open' | 'open fade'
+
+/* Волна идёт по диагонали: правые и нижние блоки срабатывают позже. */
 const CELLS = Array.from({ length: COLS * ROWS }, (_, i) => {
   const col = i % COLS
   const row = Math.floor(i / COLS)
@@ -22,10 +26,16 @@ const CELLS = Array.from({ length: COLS * ROWS }, (_, i) => {
 })
 
 const MAX_DELAY = CELLS.reduce((max, cell) => Math.max(max, cell.delay), 0)
+/* Раскрытие идёт в том же порядке, но быстрее, чем закрытие. */
+const OPEN_MAX = Math.round(MAX_DELAY * 0.45)
 
 /**
- * Оверлей перехода: экран закрывается сеткой пикселей по диагонали,
- * страница меняется под ним и сетка растворяется в обратном порядке.
+ * Переход между страницами:
+ * 1) экран закрывается сеткой блоков, по ней проходит жёлтая волна;
+ * 2) маршрут меняется под непрозрачным слоем;
+ * 3) блоки по очереди становятся прозрачными — сквозь них проявляется
+ *    следующая страница, как мозаика;
+ * 4) остаётся только сетка-обводка, и она гаснет.
  */
 export default function PixelWave() {
   const navigate = useNavigate()
@@ -53,31 +63,33 @@ export default function PixelWave() {
       clearTimers()
       setPhase('cover')
 
-      const coverTime = MAX_DELAY + IN_MS + 40
-      const revealTime = OUT_MS + Math.round(MAX_DELAY * 0.45) + 60
+      const later = (fn: () => void, ms: number) => {
+        timers.current.push(window.setTimeout(fn, ms))
+      }
 
-      timers.current.push(
-        window.setTimeout(() => {
-          navigate(to)
-          window.scrollTo({ top: 0, behavior: 'auto' })
-          setPhase('reveal')
+      later(() => {
+        navigate(to)
+        window.scrollTo({ top: 0, behavior: 'auto' })
 
-          timers.current.push(
-            window.setTimeout(() => {
+        later(() => {
+          setPhase('open')
+
+          later(() => {
+            setPhase('open fade')
+            later(() => {
               setPhase('idle')
               busy.current = false
-            }, revealTime)
-          )
-        }, coverTime)
-      )
+            }, FADE_MS)
+          }, OPEN_MAX + 160)
+        }, SETTLE_MS)
+      }, MAX_DELAY + IN_MS + 40)
     },
     [navigate]
   )
 
-  /* Перехватываем клики по ссылкам на нужные страницы, чтобы успеть
-     проиграть волну до смены маршрута. Слушаем в фазе перехвата:
-     тогда обработчики Link (в том числе закрытие мобильного меню) успевают
-     сработать раньше и не мешают переходу. */
+  /* Перехватываем клики по внутренним ссылкам, чтобы успеть проиграть волну
+     до смены маршрута. Слушаем в фазе перехвата: обработчики Link (в том числе
+     закрытие мобильного меню) успевают сработать и не мешают переходу. */
   useEffect(() => {
     const onClick = (event: MouseEvent) => {
       if (event.defaultPrevented) return
@@ -85,14 +97,17 @@ export default function PixelWave() {
       if (event.metaKey || event.ctrlKey || event.shiftKey || event.altKey) return
 
       const target = event.target as HTMLElement | null
-      const link = target?.closest?.('a[href^="#/"]') as HTMLAnchorElement | null
+      const link = target?.closest?.('a') as HTMLAnchorElement | null
       if (!link) return
 
       const href = link.getAttribute('href') || ''
-      const path = href.slice(1).split('?')[0]
+      /* Ссылка на главную в шапке — это просто «#». */
+      if (href !== '#' && !href.startsWith('#/')) return
+
+      const path = href === '#' ? '/' : href.slice(1).split('?')[0]
       if (!ROUTES.includes(path)) return
 
-      const current = (window.location.hash.slice(1).split('?')[0] || '/')
+      const current = window.location.hash.slice(1).split('?')[0] || '/'
       if (current === path) return
 
       event.preventDefault()
