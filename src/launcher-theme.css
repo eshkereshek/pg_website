@@ -1,0 +1,550 @@
+/* ==========================================================================
+   Слой темы Pagrysha Launcher 7.2 для сайта.
+   Повторяет дизайн-систему лаунчера: палитра панелей, жёлтый акцент,
+   ступенчатые углы (--mc-step-clip), фаска карточки через градиент-рамку.
+   Подключается последним и перекрывает базовые стили точечно.
+   ========================================================================== */
+
+:root {
+  /* Палитра лаунчера: фон приложения, панели, карточки, кнопки, границы. */
+  --pg-black: #151515;
+  --pg-dark: #1b1b1b;
+  --pg-dark2: #202020;
+  --pg-dark3: #2a2a2a;
+  --pg-button: #262626;
+  --pg-text: #ffffff;
+  --pg-text-muted: #8f8f8f;
+
+  /* Акцент только жёлтый: прежние оранжевый и бордовый уводим в нейтраль. */
+  --pg-primary: #f1c40f;
+  --pg-crimson: #1b1b1b;
+  --pg-crimson-hover: #202020;
+  --pg-crimson-dark: #101010;
+  --pg-crimson-border: #2a2a2a;
+  --pg-crimson-glow: rgba(241, 196, 15, 0.08);
+
+  --pg-yellow: #f1c40f;
+  --pg-yellow-hover: #f39c12;
+  --pg-yellow-dark: #d4a90a;
+
+  /* Нейтральная обводка карточек, как --mc-card-outline в лаунчере. */
+  --mc-card-outline: #4a4a4a;
+
+  /* Одна ступенька 8 px: панели, карточки, крупные блоки. */
+  --mc-step-clip: polygon(
+    0 8px, 8px 8px, 8px 0,
+    calc(100% - 8px) 0, calc(100% - 8px) 8px, 100% 8px,
+    100% calc(100% - 8px), calc(100% - 8px) calc(100% - 8px), calc(100% - 8px) 100%,
+    8px 100%, 8px calc(100% - 8px), 0 calc(100% - 8px)
+  );
+
+  /* Две ступеньки по 2 px: кнопки, поля, бейджи, иконки. */
+  --mc-step-clip-sm: polygon(
+    0 4px, 2px 4px, 2px 2px, 4px 2px, 4px 0,
+    calc(100% - 4px) 0, calc(100% - 4px) 2px, calc(100% - 2px) 2px, calc(100% - 2px) 4px, 100% 4px,
+    100% calc(100% - 4px), calc(100% - 2px) calc(100% - 4px), calc(100% - 2px) calc(100% - 2px),
+    calc(100% - 4px) calc(100% - 2px), calc(100% - 4px) 100%,
+    4px 100%, 4px calc(100% - 2px), 2px calc(100% - 2px), 2px calc(100% - 4px), 0 calc(100% - 4px)
+  );
+}
+
+/* --- База ---------------------------------------------------------------- */
+
+html, body {
+  background-color: var(--pg-black);
+  color: var(--pg-text);
+}
+
+::selection {
+  background: var(--pg-yellow);
+  color: #000;
+}
+
+::-webkit-scrollbar {
+  width: 10px;
+  height: 10px;
+}
+
+::-webkit-scrollbar-track {
+  background: #151515;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #2a2a2a;
+  border: 2px solid #151515;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #3a3a3a;
+}
+
+h1, h2, h3 {
+  letter-spacing: 0.01em;
+}
+
+/* --- Шапка: панель лаунчера ---------------------------------------------- */
+
+.navbar {
+  height: 64px;
+  background: #1b1b1b;
+  border-bottom: 2px solid #0b0b0b;
+  box-shadow: inset 0 -1px 0 rgba(255, 255, 255, 0.04);
+  backdrop-filter: none;
+  -webkit-backdrop-filter: none;
+  padding: 0 24px;
+  gap: 20px;
+}
+
+.nav-brand {
+  gap: 10px;
+  font-family: 'Blocks', sans-serif;
+  font-size: 16px;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: #fff;
+}
+
+.nav-brand img {
+  width: 30px;
+  height: 30px;
+  image-rendering: pixelated;
+  border: 2px solid #0b0b0b;
+  box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.08);
+  clip-path: var(--mc-step-clip-sm);
+}
+
+.nav-links {
+  gap: 4px;
+}
+
+.nav-links a {
+  font-family: 'Blocks', sans-serif;
+  font-size: 12.5px;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: #a8a8a8;
+  padding: 8px 10px;
+  border-radius: 0;
+  transition: color 0.12s ease, background-color 0.12s ease;
+}
+
+.nav-links a:hover {
+  color: #fff;
+  background: #262626;
+  clip-path: var(--mc-step-clip-sm);
+}
+
+/* Акцентная кнопка шапки: жёлтая, с пиксельной «подошвой», как mc-button. */
+.nav-btn {
+  font-family: 'Blocks', sans-serif;
+  font-size: 12.5px;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  background-color: var(--pg-yellow);
+  color: #000 !important;
+  padding: 8px 16px;
+  border: 2px solid #000;
+  border-radius: 0;
+  clip-path: none;
+  box-shadow:
+    inset -2px -2px 0 0 rgba(0, 0, 0, 0.3),
+    inset 2px 2px 0 0 rgba(255, 255, 255, 0.4),
+    0 3px 0 0 #000;
+  transition: transform 0.1s ease, box-shadow 0.1s ease, background-color 0.1s ease;
+}
+
+.nav-btn:hover {
+  background-color: #ffd83d;
+  color: #000 !important;
+  transform: none;
+}
+
+.nav-btn:active {
+  transform: translateY(3px);
+  box-shadow:
+    inset -2px -2px 0 0 rgba(0, 0, 0, 0.3),
+    inset 2px 2px 0 0 rgba(255, 255, 255, 0.4),
+    0 0 0 0 #000;
+}
+
+.nav-btn-danger {
+  background-color: #ff5555;
+  color: #fff !important;
+}
+
+.nav-btn-danger:hover {
+  background-color: #ff6b6b;
+  color: #fff !important;
+}
+
+.nav-mobile-overlay {
+  background: #1b1b1b;
+  border-left: 2px solid #0b0b0b;
+}
+
+.nav-mobile-overlay a {
+  font-family: 'Blocks', sans-serif;
+  font-size: 15px;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: #d0d0d0;
+  border-radius: 0;
+}
+
+.nav-mobile-overlay .nav-btn {
+  font-size: 14px;
+}
+
+/* --- Герой --------------------------------------------------------------- */
+
+.hero-overlay {
+  background: linear-gradient(180deg, rgba(21, 21, 21, 0.7) 0%, rgba(21, 21, 21, 0.88) 58%, #151515 100%);
+}
+
+.hero p {
+  color: #bdbdbd;
+}
+
+.hero-screenshot {
+  border: 2px solid #0b0b0b;
+  border-radius: 0;
+  clip-path: var(--mc-step-clip);
+  /* box-shadow обрезался бы срезом углов — тень даём drop-shadow. */
+  box-shadow: none;
+  filter: drop-shadow(0 18px 44px rgba(0, 0, 0, 0.7));
+}
+
+.hero-screenshot:hover {
+  filter: drop-shadow(0 24px 54px rgba(0, 0, 0, 0.8));
+}
+
+.hero-pixel-heart {
+  filter: none;
+}
+
+/* --- Особенности --------------------------------------------------------- */
+
+.features {
+  background-color: #151515;
+  background-image:
+    radial-gradient(ellipse 60% 45% at 50% 0%, rgba(241, 196, 15, 0.06) 0%, transparent 72%),
+    radial-gradient(rgba(255, 255, 255, 0.025) 1px, transparent 1px);
+  background-size: 100% 100%, 20px 20px;
+  border-top: 2px solid #0b0b0b;
+  border-bottom: 2px solid #0b0b0b;
+}
+
+/* Бейдж раздела — тёмный чип с жёлтой подписью, а не жёлтая плитка. */
+.features-badge {
+  background: #262626;
+  color: var(--pg-yellow);
+  border: 2px solid #0b0b0b;
+  border-radius: 0;
+  clip-path: var(--mc-step-clip-sm);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.06),
+    inset 0 -2px 0 #101010;
+  font-size: 13px;
+  letter-spacing: 0.12em;
+  padding: 7px 16px;
+}
+
+.features-title {
+  text-shadow: 3px 3px 0 #000;
+}
+
+/* Карточка: рамка-фаска градиентом, заливка на ::before, срез 8 px. */
+.bento-card {
+  position: relative;
+  background: linear-gradient(180deg, #737373 0%, #4a4a4a 42%, #262626 100%);
+  border: none;
+  border-radius: 0;
+  clip-path: var(--mc-step-clip);
+  box-shadow: none;
+  padding: 34px;
+  transition: background 0.15s ease, transform 0.15s ease, filter 0.15s ease;
+}
+
+.bento-card::before {
+  content: "";
+  position: absolute;
+  inset: 2px;
+  z-index: 0;
+  background: linear-gradient(180deg, #1f1f1f 0%, #181818 100%);
+  clip-path: var(--mc-step-clip);
+  pointer-events: none;
+}
+
+.bento-card > * {
+  position: relative;
+  z-index: 1;
+}
+
+/* Наведение как у .mc-card: вся рамка становится жёлтой. */
+.bento-card:hover {
+  background: linear-gradient(180deg, #ffe066 0%, #f1c40f 45%, #8a6d00 100%);
+  border-color: transparent;
+  box-shadow: none;
+  transform: translateY(-2px);
+  filter: drop-shadow(0 8px 14px rgba(0, 0, 0, 0.45));
+}
+
+.bento-card h3 {
+  font-size: 21px;
+}
+
+.bento-card p {
+  color: #b5b5b5;
+}
+
+/* --- Галерея ------------------------------------------------------------- */
+
+.gallery-img {
+  border: 2px solid #0b0b0b;
+  border-radius: 0;
+  clip-path: var(--mc-step-clip);
+}
+
+.gallery-tab {
+  position: relative;
+  background: linear-gradient(180deg, #4a4a4a 0%, #262626 100%);
+  border: none;
+  border-radius: 0;
+  clip-path: var(--mc-step-clip-sm);
+  box-shadow: none;
+  padding: 16px;
+  transition: background 0.15s ease, filter 0.15s ease;
+}
+
+.gallery-tab::before {
+  content: "";
+  position: absolute;
+  inset: 2px;
+  z-index: 0;
+  background: #1b1b1b;
+  clip-path: var(--mc-step-clip-sm);
+  pointer-events: none;
+  transition: background 0.15s ease;
+}
+
+.gallery-tab > * {
+  position: relative;
+  z-index: 1;
+}
+
+.gallery-tab:hover::before {
+  background: #232323;
+}
+
+.gallery-tab.active {
+  background: linear-gradient(180deg, #ffe066 0%, #f1c40f 45%, #8a6d00 100%);
+  border-color: transparent;
+}
+
+.gallery-tab.active::before {
+  background: #1b1b1b;
+}
+
+.gallery-tab.active .tab-icon {
+  color: var(--pg-yellow);
+}
+
+/* --- Подвал -------------------------------------------------------------- */
+
+.footer {
+  background-color: #1b1b1b;
+  border-top: 2px solid #0b0b0b;
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.03);
+  color: var(--pg-text-muted);
+}
+
+/* --- Страница загрузки --------------------------------------------------- */
+
+.download-warning-banner {
+  background-color: #262626;
+  color: var(--pg-yellow);
+  border-bottom: 2px solid #0b0b0b;
+  box-shadow: inset 0 -2px 0 #101010;
+}
+
+.download-hero {
+  border-bottom: 2px solid #0b0b0b;
+}
+
+.download-hero-overlay {
+  background: linear-gradient(180deg, rgba(21, 21, 21, 0.74) 0%, #151515 100%);
+}
+
+.download-hero-subtitle {
+  color: #9a9a9a;
+}
+
+/* Карточка платформы: та же фаска, что у .mc-card. */
+.version-card {
+  position: relative;
+  background: linear-gradient(180deg, #737373 0%, #4a4a4a 42%, #262626 100%);
+  border: none;
+  border-radius: 0;
+  clip-path: var(--mc-step-clip);
+  box-shadow: none;
+  transition: background 0.15s ease, transform 0.15s ease, filter 0.15s ease;
+}
+
+.version-card::before {
+  content: "";
+  position: absolute;
+  inset: 2px;
+  z-index: 0;
+  background: linear-gradient(180deg, #1f1f1f 0%, #181818 100%);
+  clip-path: var(--mc-step-clip);
+  pointer-events: none;
+}
+
+.version-card > * {
+  position: relative;
+  z-index: 1;
+}
+
+.version-card:hover {
+  background: linear-gradient(180deg, #ffe066 0%, #f1c40f 45%, #8a6d00 100%);
+  border-color: transparent;
+  box-shadow: none;
+  transform: translateY(-2px);
+  filter: drop-shadow(0 8px 14px rgba(0, 0, 0, 0.45));
+}
+
+.download-hero-image img {
+  border: 2px solid #0b0b0b;
+  clip-path: var(--mc-step-clip);
+}
+
+/* --- Вход и профиль ------------------------------------------------------ */
+
+.auth-card {
+  position: relative;
+  background: linear-gradient(180deg, #737373 0%, #4a4a4a 42%, #262626 100%);
+  border: none;
+  border-radius: 0;
+  clip-path: var(--mc-step-clip);
+  box-shadow: none;
+  margin-top: 46px;
+}
+
+.auth-card::before {
+  content: "";
+  position: absolute;
+  inset: 2px;
+  z-index: 0;
+  background: linear-gradient(180deg, #1f1f1f 0%, #181818 100%);
+  clip-path: var(--mc-step-clip);
+  pointer-events: none;
+}
+
+.auth-card > * {
+  position: relative;
+  z-index: 1;
+}
+
+.auth-card h2 {
+  font-family: 'Blocks', sans-serif;
+  background: none;
+  -webkit-background-clip: border-box;
+  -webkit-text-fill-color: #ffffff;
+  color: #ffffff;
+  text-shadow: 2px 2px 0 #000;
+  letter-spacing: 0.02em;
+}
+
+.input-group input,
+.input-with-icon,
+.captcha-box,
+.captcha-checkbox,
+.terms-checkbox,
+.help-search-box {
+  border-radius: 0;
+  clip-path: var(--mc-step-clip-sm);
+}
+
+.profile-viewer,
+.control-group,
+.info-box {
+  border-radius: 0;
+  border-color: #0b0b0b;
+  clip-path: var(--mc-step-clip);
+  box-shadow:
+    inset 0 2px 0 rgba(255, 255, 255, 0.05),
+    inset 0 -2px 0 #101010;
+  background: #202020;
+}
+
+.info-box {
+  border-left: 4px solid var(--pg-yellow);
+}
+
+.profile-tabs .nav-btn {
+  border-radius: 0;
+}
+
+/* --- Помощь и скины ------------------------------------------------------ */
+
+body .category-card,
+body .faq-accordion-item,
+body .skin-card {
+  position: relative;
+  background: linear-gradient(180deg, #4a4a4a 0%, #262626 100%);
+  border: none;
+  border-radius: 0;
+  clip-path: var(--mc-step-clip-sm);
+  box-shadow: none;
+}
+
+body .category-card::before,
+body .faq-accordion-item::before,
+body .skin-card::before {
+  content: "";
+  position: absolute;
+  inset: 2px;
+  z-index: 0;
+  background: #1b1b1b;
+  clip-path: var(--mc-step-clip-sm);
+  pointer-events: none;
+}
+
+body .category-card > *,
+body .faq-accordion-item > *,
+body .skin-card > * {
+  position: relative;
+  z-index: 1;
+}
+
+body .category-card:hover,
+body .skin-card:hover {
+  background: linear-gradient(180deg, #ffe066 0%, #f1c40f 45%, #8a6d00 100%);
+}
+
+body .popular-tag-btn {
+  border-radius: 0;
+  clip-path: var(--mc-step-clip-sm);
+}
+
+/* --- Мелкие правки под пиксельные углы ----------------------------------- */
+
+.download-btn,
+.download-btn-green,
+.version-btn,
+.features-badge,
+.footer-back-top,
+.upload-btn,
+.remove-btn {
+  border-radius: 0;
+}
+
+@media (max-width: 768px) {
+  .navbar {
+    padding: 0 16px;
+  }
+
+  .nav-brand {
+    font-size: 14px;
+  }
+}

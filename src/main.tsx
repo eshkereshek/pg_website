@@ -10,6 +10,8 @@ import Terms from './pages/Terms.tsx'
 import Privacy from './pages/Privacy.tsx'
 import Help from './pages/Help.tsx'
 import { AuthProvider } from './contexts/AuthContext.tsx'
+// Слой темы лаунчера подключается последним: он перекрывает базовые стили.
+import './launcher-theme.css'
 
 createRoot(document.getElementById('root')!).render(
   <StrictMode>
