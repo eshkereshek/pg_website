@@ -1,0 +1,83 @@
+/* Переход между страницами: сетка пикселей проходит по экрану по диагонали.
+   Слой лежит выше шапки и во время анимации перехватывает клики. */
+
+.pw {
+  position: fixed;
+  inset: 0;
+  z-index: 3000;
+  display: grid;
+  grid-template-columns: repeat(26, 1fr);
+  grid-template-rows: repeat(15, 1fr);
+  pointer-events: none;
+  opacity: 0;
+  visibility: hidden;
+}
+
+.pw.cover,
+.pw.reveal {
+  pointer-events: auto;
+  opacity: 1;
+  visibility: visible;
+}
+
+.pw-cell {
+  background: #171717;
+  /* Тонкие линии между блоками дают «пиксельную» сетку. */
+  box-shadow: inset -1px -1px 0 rgba(0, 0, 0, 0.55), inset 1px 1px 0 rgba(255, 255, 255, 0.03);
+  opacity: 0;
+  will-change: opacity, transform;
+}
+
+/* Появление: блок вспыхивает жёлтым и оседает в тёмный цвет. */
+.pw.cover .pw-cell {
+  animation: pw-in 0.26s linear var(--d) both;
+}
+
+/* Растворение: блоки гаснут от левого верхнего угла к правому нижнему. */
+.pw.reveal .pw-cell {
+  opacity: 1;
+  animation: pw-out 0.22s ease-out var(--r) both;
+}
+
+@keyframes pw-in {
+  0% {
+    opacity: 0;
+    transform: scale(1.08);
+    background: #f1c40f;
+  }
+  8% {
+    opacity: 1;
+    background: #f1c40f;
+  }
+  26% {
+    opacity: 1;
+    background: #333333;
+  }
+  100% {
+    opacity: 1;
+    transform: scale(1);
+    background: #171717;
+  }
+}
+
+@keyframes pw-out {
+  0% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0;
+    transform: scale(0.92);
+  }
+}
+
+/* Кому анимации не нужны — переход выполняется сразу. */
+@media (prefers-reduced-motion: reduce) {
+  .pw.cover .pw-cell,
+  .pw.reveal .pw-cell {
+    animation: none;
+  }
+
+  .pw.cover {
+    opacity: 0;
+  }
+}

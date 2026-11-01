@@ -46,6 +46,7 @@ function App() {
   const [menuOpen, setMenuOpen] = useState(false);
   const { isAuthenticated } = useAuth();
   const titleWrapperRef = useRef<HTMLDivElement>(null);
+  const heroShotRef = useRef<HTMLImageElement>(null);
 
   useEffect(() => {
     const wrapper = titleWrapperRef.current;
@@ -127,6 +128,49 @@ function App() {
       wrapper.removeEventListener('mousemove', handleMouseMove);
       wrapper.removeEventListener('mouseleave', handleMouseLeave);
       window.removeEventListener('resize', measure);
+    };
+  }, []);
+
+  /* Скриншот лаунчера поворачивается в сторону курсора: наклон считается
+     от центра картинки, значения ограничены, чтобы не было «провала» в 3D. */
+  useEffect(() => {
+    const el = heroShotRef.current;
+    if (!el) return;
+
+    const MAX_TILT = 9;
+    const LIFT = 8;
+    let frame = 0;
+
+    const setTransform = (rx: number, ry: number, transition: string) => {
+      el.style.transition = transition;
+      el.style.transform = `perspective(1100px) rotateX(${rx.toFixed(2)}deg) rotateY(${ry.toFixed(2)}deg) translateY(-${LIFT}px) scale(1.02)`;
+    };
+
+    const onMove = (event: MouseEvent) => {
+      const rect = el.getBoundingClientRect();
+      if (!rect.width || !rect.height) return;
+      const dx = (event.clientX - rect.left) / rect.width - 0.5;
+      const dy = (event.clientY - rect.top) / rect.height - 0.5;
+
+      if (frame) cancelAnimationFrame(frame);
+      frame = requestAnimationFrame(() => {
+        setTransform(-dy * MAX_TILT * 2, dx * MAX_TILT * 2, 'transform 90ms linear');
+      });
+    };
+
+    const onLeave = () => {
+      if (frame) cancelAnimationFrame(frame);
+      el.style.transition = 'transform 520ms cubic-bezier(0.22, 1, 0.36, 1)';
+      el.style.transform = 'perspective(1100px) rotateX(2deg) rotateY(0deg) translateY(0) scale(1)';
+    };
+
+    el.addEventListener('mousemove', onMove);
+    el.addEventListener('mouseleave', onLeave);
+
+    return () => {
+      if (frame) cancelAnimationFrame(frame);
+      el.removeEventListener('mousemove', onMove);
+      el.removeEventListener('mouseleave', onLeave);
     };
   }, []);
 
@@ -217,7 +261,7 @@ function App() {
           Скачать Pagrysha Launcher
         </Link>
 
-        <img src="/hero-launcher.png" alt="Launcher Interface" className="hero-screenshot" />
+        <img ref={heroShotRef} src="/hero-launcher.png" alt="Launcher Interface" className="hero-screenshot" />
       </section>
 
       <section id="features" className="features">
